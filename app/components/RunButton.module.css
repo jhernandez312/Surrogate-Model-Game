@@ -1,0 +1,12 @@
+.runButton {
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.runButton:hover {
+    background-color: #005bb5;
+}

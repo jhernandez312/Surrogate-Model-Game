@@ -1,34 +1,33 @@
-"use client"; // Add this line to mark the component as a Client Component
-
+'use client';
 import { useState, ChangeEvent, FormEvent } from 'react';
+import FormInput from './components/FormInput';
+import Previewer from './components/Previewer';
+import RunButton from './components/RunButton';
+import styles from './components/Home.module.css';
 
 interface FormData {
   state: string;
   buildingUse: string;
-  buildingShape: string;
-  buildingAge: string;
-  squareFootage: string;
-  ceilingHeight: string;
-  wallArea: string;
-  wwr: string; // Window to Wall Ratio
+  relativeCompactness: string;
+  surfaceArea: string;
+  roofArea: string;
+  overallHeight: string;
   orientation: string;
-  energyCode: string;
-  hvacCategory: string;
+  glazingArea: string;
+  glazingAreaDistribution: string;
 }
 
 export default function Home() {
   const [formData, setFormData] = useState<FormData>({
     state: 'Georgia',
     buildingUse: 'Office',
-    buildingShape: '',
-    buildingAge: '',
-    squareFootage: '',
-    ceilingHeight: '',
-    wallArea: '',
-    wwr: '',
+    relativeCompactness: '',
+    surfaceArea: '',
+    roofArea: '',
+    overallHeight: '',
     orientation: '',
-    energyCode: '',
-    hvacCategory: '',
+    glazingArea: '',
+    glazingAreaDistribution: '',
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -41,209 +40,80 @@ export default function Home() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData); // You can handle the form submission here
+    console.log(formData); // Handle form submission
   };
 
   return (
-    <div className="container">
+    <div className={styles.container}>
       <h1>Your Energy Bill Predictor</h1>
-      <div className="content">
-        <form onSubmit={handleSubmit} className="form">
-          <div className="form-group">
-            <label>Where is your house?</label>
-            <input
-              type="text"
-              name="state"
-              value={formData.state}
-              onChange={handleChange}
-              readOnly
-            />
-          </div>
-
-          <div className="form-group">
-            <label>What this building used for?</label>
-            <input
-              type="text"
-              name="buildingUse"
-              value={formData.buildingUse}
-              onChange={handleChange}
-              readOnly
-            />
-          </div>
+      <div className={styles.content}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <FormInput
+            label="Where is your house?"
+            name="state"
+            value={formData.state}
+            onChange={handleChange}
+            readOnly
+          />
+          <FormInput
+            label="What is this building used for?"
+            name="buildingUse"
+            value={formData.buildingUse}
+            onChange={handleChange}
+            readOnly
+          />
 
           <h3>Detailed settings</h3>
 
-          <div className="form-group">
-            <label>Building Shape:</label>
-            <input
-              type="text"
-              name="buildingShape"
-              value={formData.buildingShape}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Building Age:</label>
-            <input
-              type="text"
-              name="buildingAge"
-              value={formData.buildingAge}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Square Footage:</label>
-            <input
-              type="text"
-              name="squareFootage"
-              value={formData.squareFootage}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Ceiling Height:</label>
-            <input
-              type="text"
-              name="ceilingHeight"
-              value={formData.ceilingHeight}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Wall Area:</label>
-            <input
-              type="text"
-              name="wallArea"
-              value={formData.wallArea}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>WWR (Window to Wall Ratio):</label>
-            <input
-              type="text"
-              name="wwr"
-              value={formData.wwr}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Orientation:</label>
-            <input
-              type="text"
-              name="orientation"
-              value={formData.orientation}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Energy Code:</label>
-            <input
-              type="text"
-              name="energyCode"
-              value={formData.energyCode}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>HVAC Category:</label>
-            <input
-              type="text"
-              name="hvacCategory"
-              value={formData.hvacCategory}
-              onChange={handleChange}
-            />
-          </div>
+          <FormInput
+            label="Relative Compactness:"
+            name="relativeCompactness"
+            value={formData.relativeCompactness}
+            onChange={handleChange}
+          />
+          <FormInput
+            label="Surface Area:"
+            name="surfaceArea"
+            value={formData.surfaceArea}
+            onChange={handleChange}
+          />
+          <FormInput
+            label="Roof Area:"
+            name="roofArea"
+            value={formData.roofArea}
+            onChange={handleChange}
+          />
+          <FormInput
+            label="Overall Height:"
+            name="overallHeight"
+            value={formData.overallHeight}
+            onChange={handleChange}
+          />
+          <FormInput
+            label="Orientation:"
+            name="orientation"
+            value={formData.orientation}
+            onChange={handleChange}
+          />
+          <FormInput
+            label="Glazing Area:"
+            name="glazingArea"
+            value={formData.glazingArea}
+            onChange={handleChange}
+          />
+          <FormInput
+            label="Glazing Area Distribution:"
+            name="glazingAreaDistribution"
+            value={formData.glazingAreaDistribution}
+            onChange={handleChange}
+          />
         </form>
 
-        <div className="preview-section">
-          <div className="previewer">
-            <p>Building Geometry Previewer</p>
-          </div>
-
-          <button type="submit" className="run-button">Run</button>
+        <div className={styles.previewSection}>
+          <Previewer />
+          <RunButton formData={formData} />
         </div>
       </div>
-
-      <style jsx>{`
-        .container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          font-family: Arial, sans-serif;
-        }
-        h1 {
-          margin-bottom: 20px;
-        }
-        .content {
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
-          max-width: 1000px;
-        }
-        .form {
-          display: flex;
-          flex-direction: column;
-          width: 40%;
-        }
-        .form-group {
-          margin-bottom: 10px;
-        }
-        .form-group label {
-          display: block;
-          margin-bottom: 5px;
-        }
-        .form-group input {
-          padding: 5px;
-          width: 100%;
-          border: 1px solid #ccc; /* Added border */
-          border-radius: 4px;
-          box-shadow: none;
-        }
-        h3 {
-          margin-top: 20px;
-          font-size: 18px;
-          font-weight: normal;
-        }
-        .preview-section {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          width: 55%;
-        }
-        .previewer {
-          margin-top: 20px;
-          width: 100%;
-          height: 400px;
-          background-color: #eee;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border: 1px solid #ccc;
-          color: #666;
-          font-size: 18px;
-        }
-        .run-button {
-          padding: 10px 20px;
-          margin-top: 20px;
-          background-color: #0070f3;
-          color: white;
-          border: none;
-          cursor: pointer;
-          align-self: center;
-        }
-        .run-button:hover {
-          background-color: #005bb5;
-        }
-      `}</style>
     </div>
   );
 }
