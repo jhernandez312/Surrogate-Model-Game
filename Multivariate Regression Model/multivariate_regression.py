@@ -41,12 +41,85 @@ X = data.drop(columns=['Heating Load'], axis = 1)
 y = data[['Heating Load']]
 print(X.shape, y.shape)
 
-# a) Descriptive statistics
-set_option("display.precision", 3)
-print(data.describe())
+# a) Data Cleaning
+# summarize the number of unique values in each column
+print(data.nunique())
 
-# checking categorical features
-cat_features = data.select_dtypes(include='O').keys()
-# display variabels
-cat_features
+# Identify columns with missing values and count the number of missing values
+data.columns[data.isnull().any()]
+print(data.isnull().sum())
 
+# calculate the correlation between numerical columns and target variables
+corr_matrix = data.select_dtypes(include=np.number).corrwith(data['Heating Load']).sort_values(ascending=False)
+
+# filter columns with low correlation
+corr_threshold = 0.05
+low_corr_columns = corr_matrix[corr_matrix.abs() < corr_threshold].index
+
+# remove outliers from numerical columns with low correlation
+for column in low_corr_columns:
+    lower = data[column].quantile(0.01)
+    upper = data[column].quantile(0.99)
+    data[column] = data[column].clip(lower, upper)
+
+# calculate the correlation between numerical columns and target variables
+corr_matrix = data.select_dtypes(include=np.number).corrwith(data['Heating Load']).sort_values(ascending=False)
+
+# filter columns with low correlation
+corr_threshold = 0.05
+low_corr_columns = corr_matrix[corr_matrix.abs() < corr_threshold].index
+
+# remove outliers from numerical columns with low correlation
+for column in low_corr_columns:
+    lower = data[column].quantile(0.01)
+    upper = data[column].quantile(0.99)
+    data[column] = data[column].clip(lower, upper)
+
+# b) Split-out dataset into train and validation sets
+
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.25, random_state=1)
+
+print(X_train.shape, y_train.shape, X_val.shape, y_val.shape)
+
+# c) Data Transforms
+# Standardize the dataset by rescaling the distribution of values
+
+scaler = MinMaxScaler()
+X_train = scaler.fit_transform(X_train)
+X_val = scaler.fit_transform(X_val)
+
+# a) Spot check algorithms using cross-validation technique
+num_folds = 8
+seed = 8
+
+# Select 5 most popular linear and tree-based algorithms for evaluation
+models = []
+models.append(('LR', LinearRegression()))
+models.append(('EN', ElasticNet()))
+models.append(('RF', RandomForestRegressor()))
+models.append(('KNN', KNeighborsRegressor()))
+models.append(('SVR', MultiOutputRegressor(SVR(gamma='auto'))))
+
+# Evaluate performance of Random Forest algorithm on validation data
+model_RF = RandomForestRegressor()
+model_RF.fit(X_train, y_train)
+y_pred_RF = model_RF.predict(X_val)
+mae_pred_RF = mean_absolute_error(y_val, y_pred_RF)
+print("Mean Absolute Error of predicted data: ", mae_pred_RF)
+
+# Define baseline mean_absolute_error of y_val in the data set
+y_mean = np.mean(y)
+y_mean = np.array([y_mean]*len(y_val))
+mae_ori = mean_absolute_error(y_val, y_mean)
+print("Mean Absolute Error of original data: ", mae_ori)
+
+# a) Get best model parameters
+model_params = model_RF.get_params()
+
+# Print the model's parameters
+print(model_params)
+
+# b) Save model for later use
+# save the model to disk
+filename = 'finalized_model_multivariate.sav'
+dump(model_RF, open(filename, 'wb'))
