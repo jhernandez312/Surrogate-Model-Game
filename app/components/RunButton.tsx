@@ -1,7 +1,7 @@
 import styles from './RunButton.module.css';
 
-// Define the type for formData based on the expected structure
-interface FormData {
+// Renaming FormData to avoid conflict with the built-in FormData type
+interface FormValues {
   relativeCompactness: number;
   surfaceArea: number;
   roofArea: number;
@@ -12,7 +12,7 @@ interface FormData {
 }
 
 interface RunButtonProps {
-  formData: FormData;
+  formData: FormValues;
 }
 
 export default function RunButton({ formData }: RunButtonProps) {
