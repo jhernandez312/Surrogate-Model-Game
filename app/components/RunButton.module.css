@@ -1,12 +1,21 @@
 .runButton {
-    padding: 10px 20px;
-    margin-top: 20px;
-    background-color: #0070f3;
+    background-color: #3b82f6;
+    /* Tailwind's blue-600 */
     color: white;
-    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease-in-out;
     cursor: pointer;
 }
 
 .runButton:hover {
-    background-color: #005bb5;
+    background-color: #2563eb;
+    /* Tailwind's blue-700 */
+}
+
+.runButton:focus {
+    outline: 2px solid #93c5fd;
+    /* Focus ring (lighter blue) */
+    outline-offset: 2px;
 }

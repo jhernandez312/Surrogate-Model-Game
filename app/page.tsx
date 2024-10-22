@@ -113,7 +113,8 @@ export default function Home() {
         </form>
 
         <div className={styles.previewSection}>
-          <Previewer />
+          {/* Pass formData to Previewer */}
+          <Previewer formData={formData} />
           <RunButton formData={formData} />
         </div>
       </div>
