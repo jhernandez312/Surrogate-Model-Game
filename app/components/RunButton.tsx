@@ -18,7 +18,7 @@ interface RunButtonProps {
 export default function RunButton({ formData }: RunButtonProps) {
   const handleRun = async () => {
     try {
-      const response = await fetch('https://surrogate-model-game-1-vagb.onrender.com/predict', { // URL of the Flask API
+      const response = await fetch('http://localhost:5000/predict', { // URL of the Flask API
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
