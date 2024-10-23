@@ -33,7 +33,7 @@ export default function Home() {
     Aspect_Ratio: 1,
     Orientation: 0,
     Building_Height: 0,
-    Building_Stories: 1,
+    Building_Stories: 2,
     Building_Perimeter: 0,
     Wall_Area: 0,
     Total_Glazing_Area: 0,
@@ -66,20 +66,20 @@ export default function Home() {
             name="Building_Type"
             value={formData.Building_Type}
             onChange={handleChange}
-            options={['Residential', 'Office', 'Retail', 'Industrial', 'Institutional']}
-          />
-          <FormInput
-            label="Building Area (m²):"
-            name="Building_Area"
-            value={formData.Building_Area.toString()}
-            onChange={handleChange}
+            options={['SmallHotel', 'Retail', 'Office', 'Warehouse', 'StripMall', 'Outpatient', 'FullServiceRestaurant', 'QuickServiceRestaurant', 'LargeHotel', 'PrimarySchool', 'Hospital', 'SecondarySchool']}
           />
           <FormSelect
             label="Building Shape:"
             name="Building_Shape"
             value={formData.Building_Shape}
             onChange={handleChange}
-            options={['Rectangular', 'L-shaped', 'T-shaped', 'Circular', 'Irregular']}
+            options={ ['Wide rectangle', 'L shape', 'Square', 'Narrow rectangle', 'Courtyard', 'H shape', 'E shape', 'T shape', 'U shape', 'Cross shape']}
+          />
+          <FormInput
+            label="Building Area (m²):"
+            name="Building_Area"
+            value={formData.Building_Area.toString()}
+            onChange={handleChange}
           />
           <FormInput
             label="Aspect Ratio:"
@@ -135,18 +135,22 @@ export default function Home() {
             value={formData.Roof_Area.toString()}
             onChange={handleChange}
           />
-          <FormInput
+          <FormSelect
             label="Energy Code:"
             name="energy_code"
             value={formData.energy_code}
             onChange={handleChange}
+            options={['ComStock 90.1-2007', 'ComStock DOE Ref 1980-2004', 'ComStock 90.1-2004', 'ComStock DOE Ref Pre-1980']}
           />
-          <FormInput
+
+          <FormSelect
             label="HVAC Category:"
             name="hvac_category"
             value={formData.hvac_category}
             onChange={handleChange}
+            options={['Small Packaged Unit', 'Multizone CAV/VAV', 'Zone-by-Zone', 'Residential Style Central Systems']}
           />
+
         </form>
 
         <div className={styles.previewSection}>
