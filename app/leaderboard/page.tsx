@@ -31,6 +31,7 @@ export default function Leaderboard() {
               <th>Rank</th>
               <th>Building Type</th>
               <th>Heating Demand</th>
+              <th>Cooling Demand</th>
             </tr>
           </thead>
           <tbody>
@@ -39,6 +40,7 @@ export default function Leaderboard() {
                 <td>{index + 1}</td>
                 <td>{result.building_type}</td>
                 <td>{result.heating_demand}</td>
+                <td>{result.cooling_demand}</td>
               </tr>
             ))}
           </tbody>
