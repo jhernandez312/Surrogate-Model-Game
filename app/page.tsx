@@ -7,6 +7,7 @@ import Previewer from './components/Previewer';
 import RunButton from './components/RunButton';
 import styles from './components/Home.module.css';
 import FormSelect from './components/FormSelect';
+import defaultBuildings from './data/defaultBuilding.json'; // Adjust the path as necessary
 
 interface FormData {
   Building_Type: string;
@@ -26,24 +27,55 @@ interface FormData {
 }
 
 export default function Home() {
+  const initialBuilding = defaultBuildings.find((building) => building.X1_Type === 'SmallOffice');
+
   const [formData, setFormData] = useState<FormData>({
-    Building_Type: 'Residential',
-    Building_Area: 0,
-    Building_Shape: 'Rectangular',
-    Aspect_Ratio: 1,
-    Orientation: 0,
-    Building_Height: 0,
-    Building_Stories: 2,
-    Building_Perimeter: 0,
-    Wall_Area: 0,
-    Total_Glazing_Area: 0,
-    Window_to_Wall_Ratio: 0,
-    Roof_Area: 0,
-    energy_code: 'Default',
-    hvac_category: 'Default',
+    Building_Type: initialBuilding?.X1_Type || 'SmallOffice',
+    Building_Area: initialBuilding?.X2_Area || 0,
+    Building_Shape: initialBuilding?.X3_Shape || 'Wide rectangle',
+    Aspect_Ratio: initialBuilding?.X4_AspectRatio || 1,
+    Orientation: initialBuilding?.X5_Orientation || 0,
+    Building_Height: initialBuilding?.X6_Height || 0,
+    Building_Stories: initialBuilding?.X7_Stories || 2,
+    Building_Perimeter: initialBuilding?.X8_Perimeter || 0,
+    Wall_Area: initialBuilding?.X9_WallArea || 0,
+    Total_Glazing_Area: initialBuilding?.X10_WindowArea || 0,
+    Window_to_Wall_Ratio: initialBuilding?.X11_WWR || 0,
+    Roof_Area: initialBuilding?.X12_RoofArea || 0,
+    energy_code: initialBuilding?.X13_EnergyCode || 'ComStock 90.1-2007',
+    hvac_category: initialBuilding?.X14_HVAC || 'Small Packaged Unit',
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  // Function to handle building type selection and auto-populate fields based on JSON data
+  const handleBuildingTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedBuildingType = e.target.value;
+
+    // Find the default building data for the selected type
+    const selectedBuilding = defaultBuildings.find((building) => building.X1_Type === selectedBuildingType);
+
+    if (selectedBuilding) {
+      // Update formData with default building settings
+      setFormData({
+        Building_Type: selectedBuilding.X1_Type,
+        Building_Area: selectedBuilding.X2_Area,
+        Building_Shape: selectedBuilding.X3_Shape,
+        Aspect_Ratio: selectedBuilding.X4_AspectRatio,
+        Orientation: selectedBuilding.X5_Orientation,
+        Building_Height: selectedBuilding.X6_Height,
+        Building_Stories: selectedBuilding.X7_Stories,
+        Building_Perimeter: selectedBuilding.X8_Perimeter,
+        Wall_Area: selectedBuilding.X9_WallArea,
+        Total_Glazing_Area: selectedBuilding.X10_WindowArea,
+        Window_to_Wall_Ratio: selectedBuilding.X11_WWR,
+        Roof_Area: selectedBuilding.X12_RoofArea,
+        energy_code: selectedBuilding.X13_EnergyCode,
+        hvac_category: selectedBuilding.X14_HVAC,
+      });
+    }
+  };
+
+  // Define the missing handleGeneralChange function
+  const handleGeneralChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -60,97 +92,110 @@ export default function Home() {
     <div className={styles.container}>
       <h1>Building Energy Predictor</h1>
       <div className={styles.content}>
-      <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <FormSelect
             label="Building Type:"
             name="Building_Type"
             value={formData.Building_Type}
-            onChange={handleChange}
-            options={['SmallHotel', 'Retail', 'Office', 'Warehouse', 'StripMall', 'Outpatient', 'FullServiceRestaurant', 'QuickServiceRestaurant', 'LargeHotel', 'PrimarySchool', 'Hospital', 'SecondarySchool']}
+            onChange={handleBuildingTypeChange} // Updated to use the new handler
+            options={[
+              'Warehouse',
+              'StripMall',
+              'Retail',
+              'Office',
+              'QuickServiceRestaurant',
+              'PrimarySchool',
+              'Hospital',
+              'SmallOffice', // Default on load
+              'OutPatient',
+              'LargeOffice',
+              'FullServiceRestaurant',
+              'SmallHotel',
+              'SecondarySchool',
+              'LargeHotel',
+            ]}
           />
           <FormSelect
             label="Building Shape:"
             name="Building_Shape"
             value={formData.Building_Shape}
-            onChange={handleChange}
-            options={ ['Wide rectangle', 'L shape', 'Square', 'Narrow rectangle', 'Courtyard', 'H shape', 'E shape', 'T shape', 'U shape', 'Cross shape']}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
+            options={['Wide rectangle', 'L shape', 'Square', 'Narrow rectangle', 'Courtyard', 'H shape', 'E shape', 'T shape', 'U shape', 'Cross shape']}
           />
           <FormInput
             label="Building Area (m²):"
             name="Building_Area"
             value={formData.Building_Area.toString()}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
           <FormInput
             label="Aspect Ratio:"
             name="Aspect_Ratio"
             value={formData.Aspect_Ratio.toString()}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
           <FormInput
             label="Orientation (degrees):"
             name="Orientation"
             value={formData.Orientation.toString()}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
           <FormInput
             label="Building Height (m):"
             name="Building_Height"
             value={formData.Building_Height.toString()}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
           <FormInput
             label="Building Stories:"
             name="Building_Stories"
             value={formData.Building_Stories.toString()}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
           <FormInput
             label="Building Perimeter (m):"
             name="Building_Perimeter"
             value={formData.Building_Perimeter.toString()}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
           <FormInput
             label="Wall Area (m²):"
             name="Wall_Area"
             value={formData.Wall_Area.toString()}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
           <FormInput
             label="Total Glazing Area (m²):"
             name="Total_Glazing_Area"
             value={formData.Total_Glazing_Area.toString()}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
           <FormInput
             label="Window to Wall Ratio:"
             name="Window_to_Wall_Ratio"
             value={formData.Window_to_Wall_Ratio.toString()}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
           <FormInput
             label="Roof Area (m²):"
             name="Roof_Area"
             value={formData.Roof_Area.toString()}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
           <FormSelect
             label="Energy Code:"
             name="energy_code"
             value={formData.energy_code}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
             options={['ComStock 90.1-2007', 'ComStock DOE Ref 1980-2004', 'ComStock 90.1-2004', 'ComStock DOE Ref Pre-1980']}
           />
-
           <FormSelect
             label="HVAC Category:"
             name="hvac_category"
             value={formData.hvac_category}
-            onChange={handleChange}
+            onChange={handleGeneralChange} // Updated to use handleGeneralChange
             options={['Small Packaged Unit', 'Multizone CAV/VAV', 'Zone-by-Zone', 'Residential Style Central Systems']}
           />
-
         </form>
 
         <div className={styles.previewSection}>
