@@ -64,34 +64,48 @@
 }
 
 .leaderboardContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Makes the container take the full height of the viewport */
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full viewport height */
+  position: relative;
+}
+
+.topRightButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.centeredTable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .leaderboardTable {
-    border-collapse: collapse;
-    width: 50%; /* Adjust this width as per your needs */
-    text-align: left;
-  }
-  
+  border-collapse: collapse;
+  width: 700px; /* Adjusted to make the table wider */
+  text-align: left;
+}
+
 .leaderboardTable th, .leaderboardTable td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    color: #f2f2f2; /* Light text color for visibility in dark mode */
-  }
-  
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  color: #f2f2f2;
+}
+
 .leaderboardTable th {
-    background-color: #333; /* Dark background for header */
-    color: #f2f2f2; /* Light text color for header */
-    font-weight: bold;
-  }
-  
+  background-color: #333;
+  color: #f2f2f2;
+  font-weight: bold;
+}
+
 .leaderboardTable td {
-    background-color: #444; /* Slightly lighter background for rows */
-  }
-  
+  background-color: #444;
+}
+
 .leaderboardTable tr:nth-child(even) {
-    background-color: #555; /* Alternating row color */
-  }  
+  background-color: #555;
+}
