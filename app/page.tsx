@@ -4,8 +4,8 @@ import FormInput from './components/FormInput';
 import Previewer from './components/Previewer';
 import RunButton from './components/RunButton';
 import styles from './components/Home.module.css';
+import Link from 'next/link';
 
-// Define the interface with numbers for relevant fields
 interface FormData {
   state: string;
   buildingUse: string;
@@ -19,7 +19,6 @@ interface FormData {
 }
 
 export default function Home() {
-  // Initialize form data with number values for the numeric fields
   const [formData, setFormData] = useState<FormData>({
     state: 'Georgia',
     buildingUse: 'Office',
@@ -32,7 +31,6 @@ export default function Home() {
     glazingAreaDistribution: 0,
   });
 
-  // Ensure that numerical values are correctly parsed to numbers
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -48,7 +46,14 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <h1>Your Energy Bill Predictor</h1>
+      {/* Centered Title and Leaderboard Link */}
+      <header className={styles.header}>
+        <h1 className={styles.headerTitle}>Your Energy Bill Predictor</h1>
+        <Link href="/leaderboard" className={styles.leaderboardLink}>
+          Leaderboard
+        </Link>
+      </header>
+
       <div className={styles.content}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <FormInput
@@ -66,48 +71,46 @@ export default function Home() {
             readOnly
           />
 
-          <h3>Detailed settings</h3>
-
           <FormInput
             label="Relative Compactness:"
             name="relativeCompactness"
-            value={formData.relativeCompactness.toString()} // Convert to string for input value
+            value={formData.relativeCompactness.toString()}
             onChange={handleChange}
           />
           <FormInput
             label="Surface Area:"
             name="surfaceArea"
-            value={formData.surfaceArea.toString()} // Convert to string for input value
+            value={formData.surfaceArea.toString()}
             onChange={handleChange}
           />
           <FormInput
             label="Roof Area:"
             name="roofArea"
-            value={formData.roofArea.toString()} // Convert to string for input value
+            value={formData.roofArea.toString()}
             onChange={handleChange}
           />
           <FormInput
             label="Overall Height:"
             name="overallHeight"
-            value={formData.overallHeight.toString()} // Convert to string for input value
+            value={formData.overallHeight.toString()}
             onChange={handleChange}
           />
           <FormInput
             label="Orientation:"
             name="orientation"
-            value={formData.orientation.toString()} // Convert to string for input value
+            value={formData.orientation.toString()}
             onChange={handleChange}
           />
           <FormInput
             label="Glazing Area:"
             name="glazingArea"
-            value={formData.glazingArea.toString()} // Convert to string for input value
+            value={formData.glazingArea.toString()}
             onChange={handleChange}
           />
           <FormInput
             label="Glazing Area Distribution:"
             name="glazingAreaDistribution"
-            value={formData.glazingAreaDistribution.toString()} // Convert to string for input value
+            value={formData.glazingAreaDistribution.toString()}
             onChange={handleChange}
           />
         </form>
