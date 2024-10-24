@@ -18,7 +18,7 @@ const Previewer: React.FC<BoxProps> = ({ width, height, depth }) => {
   const { camera, scene } = useThree(); // Access the camera and scene from Three.js
 
   // Set camera position to ensure it looks down enough to see the ground
-  camera.position.set(0, 2, 5);
+  camera.position.set(0, 20, 150); // Move the camera further away from the object to zoom out
 
   // Set background to light grey
   scene.background = new THREE.Color(0xd3d3d3); // Light grey color
