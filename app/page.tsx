@@ -6,8 +6,10 @@ import FormInput from './components/FormInput';
 import Previewer from './components/Previewer';
 import RunButton from './components/RunButton';
 import styles from './components/Home.module.css';
+import Link from 'next/link';
 import FormSelect from './components/FormSelect';
 import defaultBuildings from './data/defaultBuilding.json'; // Adjust the path as necessary
+
 
 interface FormData {
   Building_Type: string;
@@ -27,6 +29,7 @@ interface FormData {
 }
 
 export default function Home() {
+
   const initialBuilding = defaultBuildings.find((building) => building.X1_Type === 'SmallOffice');
 
   const [formData, setFormData] = useState<FormData>({
@@ -90,7 +93,15 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <h1>Building Energy Predictor</h1>
+
+      {/* Centered Title and Leaderboard Link */}
+      <header className={styles.header}>
+        <h1 className={styles.headerTitle}>Your Energy Bill Predictor</h1>
+        <Link href="/leaderboard" className={styles.leaderboardLink}>
+          Leaderboard
+        </Link>
+      </header>
+
       <div className={styles.content}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <FormSelect
