@@ -157,12 +157,23 @@ export default function Home() {
             value={formData.Building_Height.toString()}
             onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
-          <FormInput
-            label="Building Stories:"
-            name="Building_Stories"
-            value={formData.Building_Stories.toString()}
-            onChange={handleGeneralChange} // Updated to use handleGeneralChange
-          />
+        {/* Read-only input box for Building Stories */}
+        <FormInput
+          label="Building Stories:"
+          name="Building_Stories"
+          value={formData.Building_Stories.toString()}
+          onChange={handleGeneralChange}
+          readOnly // Makes the input box display-only
+        />
+        <input
+          type="range"
+          name="Building_Stories"
+          min="1"
+          max="14"
+          value={formData.Building_Stories}
+          onChange={handleGeneralChange}
+        />
+
           <FormInput
             label="Building Perimeter (m):"
             name="Building_Perimeter"
@@ -182,10 +193,20 @@ export default function Home() {
             onChange={handleGeneralChange} // Updated to use handleGeneralChange
           />
           <FormInput
-            label="Window to Wall Ratio:"
+            label="Window to Wall Ratio (WWR):"
             name="Window_to_Wall_Ratio"
             value={formData.Window_to_Wall_Ratio.toString()}
             onChange={handleGeneralChange} // Updated to use handleGeneralChange
+            readOnly
+          />
+          <input
+            type="range"
+            name="Window_to_Wall_Ratio"
+            min="0.1"
+            max="76.1"
+            step="0.1"
+            value={formData.Window_to_Wall_Ratio}
+            onChange={handleGeneralChange}
           />
           <FormInput
             label="Roof Area (m²):"
