@@ -29,10 +29,6 @@ def predict():
 
     # Continue with scaling and prediction...
 
-
-    # Rest of your code...
-
-
     # Load training data for scaling
     X_train = pd.read_csv('EPB_data.csv')
     scaler = MinMaxScaler()
