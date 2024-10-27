@@ -236,11 +236,13 @@ export default function Home() {
             <ambientLight />
             <pointLight position={[10, 10, 10]} />
             <Previewer
-              width={formData.Building_Area / 10 || 1} // Example mapping
+              width={formData.Building_Area / 10 || 1}
               height={formData.Building_Height / 10 || 1}
               depth={formData.Roof_Area / 10 || 1}
+              modelPath="courtyard.glb" // Add the path to your model here
             />
           </Canvas>
+
           <RunButton formData={formData} />
         </div>
       </div>
