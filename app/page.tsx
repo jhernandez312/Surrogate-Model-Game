@@ -51,6 +51,11 @@ export default function Home() {
     Roof_Area: 0,
   });
 
+  const [color, setColor] = useState("#58afef");
+
+  const handleColorChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setColor(e.target.value);
+  };
   const calculateDependentVariables = () => {
     const { Length, Width, Floor_Height, Building_Stories, WWR, Building_Shape } = formData;
   
@@ -122,7 +127,7 @@ export default function Home() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData); // Handle form submission
+    console.log(formData);
   };
 
   return (
@@ -196,13 +201,16 @@ export default function Home() {
         <div className={styles.previewSection}>
           <Canvas style={{ height: 400, width: '100%' }}>
             <ambientLight />
-            <pointLight position={[10, 10, 10]} />
             <Previewer
               width={formData.Building_Area / 10 || 1}
               height={formData.Building_Height / 10 || 1}
               depth={formData.Roof_Area / 10 || 1}
+              modelPath="courtyard.glb"
+              color={color}
+              specificPartColor={'#7bc379'}
             />
           </Canvas>
+
           <RunButton formData={formData} />
         </div>
       </div>

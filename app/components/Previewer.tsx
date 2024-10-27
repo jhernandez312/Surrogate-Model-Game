@@ -1,68 +1,97 @@
-'use client';
+'use client'; // Marks this as a React client component.
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useThree } from '@react-three/fiber';
-import { useDrag } from '@use-gesture/react';
+import { useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { useDrag } from '@use-gesture/react';
+import { PerspectiveCamera } from '@react-three/drei';
 
-interface BoxProps {
+interface PreviewerProps {
   width: number;
   height: number;
   depth: number;
+  modelPath: string; // Path to the 3D model file (GLTF format)
+  color: string; // Added color prop to change the model color dynamically
+  specificPartColor: string; // Color for specific part(s) of the model
 }
 
-// Box component for rendering the 3D box with dynamic size, outline, and draggable interaction
-const Previewer: React.FC<BoxProps> = ({ width, height, depth }) => {
-  const boxRef = useRef<THREE.Mesh>(null!);
-  const outlineRef = useRef<THREE.LineSegments>(null!);
-  const { camera, scene } = useThree(); // Access the camera and scene from Three.js
+const Previewer: React.FC<PreviewerProps> = ({ width, height, depth, modelPath, color, specificPartColor }) => {
+  const modelRef = useRef<THREE.Group>(null!);
+  const gridRef = useRef<THREE.GridHelper>(null!); // Reference to the grid
+  const { scene } = useThree();
+  scene.background = new THREE.Color(0xd3d3d3); // Set the scene background to a light grey
 
-  // Set camera position to ensure it looks down enough to see the ground
-  camera.position.set(0, 20, 150); // Move the camera further away from the object to zoom out
-
-  // Set background to light grey
-  scene.background = new THREE.Color(0xd3d3d3); // Light grey color
+  // Load the GLTF model
+  const gltf = useLoader(GLTFLoader, modelPath);
 
   // Drag interaction using `useDrag`
   const bind = useDrag(
     ({ offset: [x, y] }) => {
-      if (boxRef.current) {
-        boxRef.current.rotation.y = x / 100; // Adjust rotation based on drag x movement
-        boxRef.current.rotation.x = y / 100; // Adjust rotation based on drag y movement
-      }
-      if (outlineRef.current) {
-        outlineRef.current.rotation.y = x / 100;
-        outlineRef.current.rotation.x = y / 100;
+      if (modelRef.current) {
+        modelRef.current.rotation.y = x / 100; // Rotate the model on the Y-axis
+        modelRef.current.rotation.x = y / 100; // Rotate the model on the X-axis
+        if (gridRef.current) {
+          gridRef.current.rotation.y = x / 100; // Move grid with the model
+          gridRef.current.rotation.x = y / 100; // Move grid with the model
+        }
       }
     },
-    { pointerEvents: true } // Enable pointer events for drag
+    { pointerEvents: true }
   );
 
-  // Define face colors for the cube (6 sides, each side a different color)
-  const faceColors = [
-    new THREE.Color(0xff0000), // Red
-    new THREE.Color(0x00ff00), // Green
-    new THREE.Color(0x0000ff), // Blue
-    new THREE.Color(0xffff00), // Yellow
-    new THREE.Color(0xff00ff), // Magenta
-    new THREE.Color(0x00ffff), // Cyan
-  ];
+  // Ensure the model scales based on the input width, height, depth
+  useEffect(() => {
+    if (gltf.scene && modelRef.current) {
+      modelRef.current.scale.set(width / 10, height / 10, depth / 10); // Scale the model based on dimensions
+    }
+  }, [width, height, depth, gltf]);
 
-  // Creating materials for each face of the box
-  const materials = faceColors.map((color) => new THREE.MeshBasicMaterial({ color }));
+  // Add a grid underneath the model
+  useEffect(() => {
+    if (gridRef.current) {
+      gridRef.current.position.set(0, -1, 0); // Position the grid slightly below the model
+    }
+  }, []);
+
+  // Apply color change to specific parts of the model
+  useEffect(() => {
+    if (gltf.scene && modelRef.current) {
+      gltf.scene.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+
+          // Check if it's a specific part by name, index, or other identifier
+          if (mesh.name === 'specificPartName' || mesh.uuid === 'specificUUID') {
+            // Change the color of this specific part
+            mesh.material = new THREE.MeshStandardMaterial({ color: new THREE.Color(specificPartColor) });
+          } else {
+            // Set general color for the rest of the model
+            mesh.material = new THREE.MeshStandardMaterial({ color: new THREE.Color(color) });
+          }
+        }
+      });
+    }
+  }, [color, specificPartColor, gltf]);
 
   return (
     <>
-      {/* Main box mesh with different colors for each face */}
-      <mesh ref={boxRef} scale={[width, height, depth]} position={[0, height / 2, 0]} material={materials} {...bind()}>
-        <boxGeometry args={[1, 1, 1]} />
-      </mesh>
+      {/* Perspective Camera setup */}
+      <PerspectiveCamera
+        makeDefault // Make this camera the default one used by the renderer
+        fov={50} // Field of view
+        aspect={width / height} // Aspect ratio (usually width / height)
+        near={0.1} // Near clipping plane
+        far={10000} // Far clipping plane
+        position={[0, 5, 30]} // Camera position
+      />
 
-      {/* Outline wireframe */}
-      <lineSegments ref={outlineRef} scale={[width * 1.01, height * 1.01, depth * 1.01]} position={[0, height / 2, 0]} {...bind()}>
-        <edgesGeometry args={[new THREE.BoxGeometry(1, 1, 1)]} />
-        <lineBasicMaterial color="black" />
-      </lineSegments>
+      {/* Grid helper underneath the model with a lighter color */}
+      <gridHelper ref={gridRef} args={[100, 100, 0x333333, 0x777777]} />
+
+      {/* Render the loaded GLTF model with drag interaction */}
+      <primitive object={gltf.scene} ref={modelRef} {...bind()} />
     </>
   );
 };
