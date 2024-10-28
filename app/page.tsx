@@ -209,8 +209,23 @@ export default function Home() {
             label="Orientation (degrees):"
             name="Orientation"
             value={formData.Orientation.toString()}
-            onChange={handleInputChange}
+            readOnly={true}  // Keep the text field read-only
+            onChange={() => {}}  // Provide an empty function to satisfy TypeScript
           />
+          {/* Handle the slider separately to update Orientation */}
+          <input
+            type="range"
+            name="Orientation"
+            min="0"
+            max="360"
+            step="45"
+            value={formData.Orientation}
+            onChange={(e) =>
+              setFormData({ ...formData, Orientation: Number(e.target.value) })
+            }
+            style={{ width: '100%', marginTop: '1px' }}
+          />
+
           <FormInput
             label="Floor Height (m):"
             name="Floor_Height"
@@ -224,8 +239,6 @@ export default function Home() {
             readOnly={true}
             onChange={() => {}}  // Provide an empty function to satisfy TypeScript
           />
-
-
           {/* Handle the slider separately to update Building_Stories */}
           <input
             type="range"
