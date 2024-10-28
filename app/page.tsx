@@ -6,7 +6,6 @@ import FormInput from './components/FormInput';
 import Previewer from './components/Previewer';
 import RunButton from './components/RunButton';
 import styles from './components/Home.module.css';
-import Link from 'next/link';
 import FormSelect from './components/FormSelect';
 import defaultBuildings from './data/defaultBuilding.json'; // Adjust the path as necessary
 import Leaderboard from './components/Leaderboard'; // Import the Leaderboard component

@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useState, useEffect } from 'react'; // Removed 'Link' since it's not used
 import styles from './Home.module.css'; // You can create a separate CSS file for the leaderboard if needed
 import defaultBuildings from '../data/defaultBuilding.json';
 
@@ -94,8 +93,7 @@ export default function Leaderboard() {
           </tbody>
         </table>
       </div>
-  
-      {/* Move Clear Results button below the table */}
+
       <div className={styles.refreshButton}>
         <button
           onClick={clearSimulationData}
@@ -105,5 +103,5 @@ export default function Leaderboard() {
         </button>
       </div>
     </div>
-  );  
+  );
 }
