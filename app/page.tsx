@@ -21,35 +21,35 @@ interface FormData {
   WWR: number;
   energy_code: string;
   hvac_category: string;
-  Building_Area: number;
-  Aspect_Ratio: number;
   Building_Height: number;
-  Building_Perimeter: number;
   Wall_Area: number;
   Total_Glazing_Area: number;
   Roof_Area: number;
 }
 
 export default function Home() {
+  // Find the initial default values from the "SmallOffice" type in defaultBuilding.json
+  const initialBuilding = defaultBuildings.find(
+    (building) => building.X1_Type === 'SmallOffice'
+  );
+
   const [formData, setFormData] = useState<FormData>({
-    Building_Type: 'SmallOffice',
-    Length: 50,
-    Width: 30,
-    Building_Shape: 'Wide rectangle',
-    Orientation: 0,
-    Floor_Height: 3,
-    Building_Stories: 2,
-    WWR: 20,
-    energy_code: 'ComStock 90.1-2007',
-    hvac_category: 'Small Packaged Unit',
-    Building_Area: 0,
-    Aspect_Ratio: 0,
+    Building_Type: initialBuilding?.X1_Type || 'SmallOffice',
+    Length: initialBuilding?.X13_Length || 50,
+    Width: initialBuilding?.X14_Width || 30,
+    Building_Shape: initialBuilding?.X2_Shape || 'Wide rectangle',
+    Orientation: initialBuilding?.X3_Orientation || 0,
+    Floor_Height: initialBuilding?.X15_FloorHeight || 3,
+    Building_Stories: initialBuilding?.X5_Stories || 2,
+    WWR: initialBuilding?.X8_WWR || 20, // Convert to percentage
+    energy_code: initialBuilding?.X10_EnergyCode || 'ComStock 90.1-2007',
+    hvac_category: initialBuilding?.X12_HVAC || 'Small Packaged Unit',
     Building_Height: 0,
-    Building_Perimeter: 0,
     Wall_Area: 0,
     Total_Glazing_Area: 0,
-    Roof_Area: 0,
+    Roof_Area: initialBuilding?.X9_RoofArea || 0,
   });
+
 
   const [color, setColor] = useState("#58afef");
 
@@ -61,46 +61,31 @@ export default function Home() {
   
     console.log('Recalculating dependent variables for:', { Length, Width, Floor_Height, Building_Stories, WWR, Building_Shape });
   
-    let Building_Area = 0,
-      Aspect_Ratio = 0,
-      Building_Height = 0,
-      Building_Perimeter = 0,
+    let Building_Height = 0,
       Wall_Area = 0,
       Total_Glazing_Area = 0,
       Roof_Area = 0;
   
     if (Building_Shape === 'Wide rectangle') {
       Roof_Area = Length * Width;
-      Aspect_Ratio = Length / Width;
       Building_Height = Floor_Height * Building_Stories;
-      Building_Perimeter = 2 * (Length + Width);
-      Wall_Area = Building_Perimeter * Building_Height;
-      Total_Glazing_Area = Wall_Area * (WWR / 100);
-      Building_Area = Roof_Area * 10.7639;
+      Wall_Area = 2 * (Length + Width) * Building_Height;
+      Total_Glazing_Area = Wall_Area * (WWR);
     } else if (Building_Shape === 'L shape') {
       Roof_Area = 5 * (Length * Width) / 9;
-      Aspect_Ratio = Length / Width;
       Building_Height = Floor_Height * Building_Stories;
-      Building_Perimeter = 2 * (Length + Width);
-      Wall_Area = Building_Perimeter * Building_Height;
-      Total_Glazing_Area = Wall_Area * (WWR / 100);
-      Building_Area = Roof_Area * 10.7639;
+      Wall_Area = 2 * (Length + Width) * Building_Height;
+      Total_Glazing_Area = Wall_Area * (WWR);
     } else if (Building_Shape === 'T shape') {
       Roof_Area = 5 * (Length * Width) / 9;
-      Aspect_Ratio = Length / Width;
       Building_Height = Floor_Height * Building_Stories;
-      Building_Perimeter = 2 * (Length + Width);
-      Wall_Area = Building_Perimeter * Building_Height;
-      Total_Glazing_Area = Wall_Area * (WWR / 100);
-      Building_Area = Roof_Area * 10.7639;
+      Wall_Area = 2 * (Length + Width) * Building_Height;
+      Total_Glazing_Area = Wall_Area * (WWR);
     }
   
     setFormData((prevData) => ({
       ...prevData,
-      Building_Area,
-      Aspect_Ratio,
       Building_Height,
-      Building_Perimeter,
       Wall_Area,
       Total_Glazing_Area,
       Roof_Area,
@@ -109,20 +94,47 @@ export default function Home() {
   
   
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedBuildingType = e.target.value;
   
-    setFormData({
-      ...formData,
-      [name]: isNaN(Number(value)) ? value : Number(value),  // Handle numeric and non-numeric values properly
-    });
+    // Find the corresponding building type in defaultBuildings JSON
+    const selectedBuilding = defaultBuildings.find(
+      (building) => building.X1_Type === selectedBuildingType
+    );
   
-  };
-  
+    if (selectedBuilding) {
+      // Update formData with default building settings
+      setFormData({
+        ...formData,
+        Building_Type: selectedBuilding.X1_Type,
+        Building_Shape: selectedBuilding.X2_Shape,
+        Orientation: selectedBuilding.X3_Orientation,
+        Floor_Height: selectedBuilding.X15_FloorHeight,
+        Building_Stories: selectedBuilding.X5_Stories,
+        WWR: selectedBuilding.X8_WWR, // Convert to percentage
+        energy_code: selectedBuilding.X10_EnergyCode,
+        hvac_category: selectedBuilding.X12_HVAC,
+        Length: selectedBuilding.X13_Length,
+        Width: selectedBuilding.X14_Width,
+        Roof_Area: selectedBuilding.X9_RoofArea,
+        Wall_Area: selectedBuilding.X6_WallArea,
+        Total_Glazing_Area: selectedBuilding.X7_WindowArea,
+      });
+    }
+  };  
   
   useEffect(() => {
     calculateDependentVariables();  // Recalculate dependent values when any independent variable changes
-  }, [formData.Length, formData.Width, formData.Building_Stories, formData.WWR, formData.Building_Shape, formData.Floor_Height]);
+  }, [
+    formData.Building_Type, 
+    formData.Building_Shape, 
+    formData.Length, 
+    formData.Width, 
+    formData.Floor_Height, 
+    formData.Building_Stories, 
+    formData.WWR
+  ]);
+  
   
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -141,13 +153,14 @@ export default function Home() {
 
       <div className={styles.content}>
         <form onSubmit={handleSubmit} className={styles.form}>
-          <FormSelect
-            label="Building Type:"
-            name="Building_Type"
-            value={formData.Building_Type}
-            onChange={handleChange}
-            options={['Warehouse', 'StripMall', 'Retail', 'Office', 'QuickServiceRestaurant', 'PrimarySchool', 'Hospital', 'SmallOffice']}
-          />
+        <FormSelect
+          label="Building Type:"
+          name="Building_Type"
+          value={formData.Building_Type}
+          onChange={handleChange} // Call the new handler function
+          options={defaultBuildings.map((building) => building.X1_Type)}
+        />
+
           <FormSelect
             label="Building Shape:"
             name="Building_Shape"
@@ -202,7 +215,7 @@ export default function Home() {
           <Canvas style={{ height: 400, width: '100%' }}>
             <ambientLight />
             <Previewer
-              width={formData.Building_Area / 10 || 1}
+              width={formData.Roof_Area / 10 || 1}
               height={formData.Building_Height / 10 || 1}
               depth={formData.Roof_Area / 10 || 1}
               modelPath="courtyard.glb"
