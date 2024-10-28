@@ -53,19 +53,34 @@ export default function Home() {
 
   const [color, setColor] = useState("#58afef");
 
+  // Dynamically update modelPath based on the selected building shape
+  const getModelPath = () => {
+    switch (formData.Building_Shape) {
+      case 'Wide rectangle':
+        return 'wideRectangle.glb'; // Path to the Wide Rectangle model
+      case 'L shape':
+        return 'lShape.glb'; // Path to the L Shape model
+      case 'T shape':
+        return 'tShape.glb'; // Path to the T Shape model
+      default:
+        return 'defaultModel.glb'; // Fallback model
+    }
+  };
+
   const handleColorChange = (e: ChangeEvent<HTMLInputElement>) => {
     setColor(e.target.value);
   };
+
   const calculateDependentVariables = () => {
     const { Length, Width, Floor_Height, Building_Stories, WWR, Building_Shape } = formData;
-  
+
     console.log('Recalculating dependent variables for:', { Length, Width, Floor_Height, Building_Stories, WWR, Building_Shape });
-  
+
     let Building_Height = 0,
       Wall_Area = 0,
       Total_Glazing_Area = 0,
       Roof_Area = 0;
-  
+
     if (Building_Shape === 'Wide rectangle') {
       Roof_Area = Length * Width;
       Building_Height = Floor_Height * Building_Stories;
@@ -82,7 +97,7 @@ export default function Home() {
       Wall_Area = 2 * (Length + Width) * Building_Height;
       Total_Glazing_Area = Wall_Area * (WWR);
     }
-  
+
     setFormData((prevData) => ({
       ...prevData,
       Building_Height,
@@ -91,8 +106,7 @@ export default function Home() {
       Roof_Area,
     }));
   };
-  
-  
+
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedBuildingType = e.target.value;
@@ -135,7 +149,7 @@ export default function Home() {
     formData.WWR
   ]);
   
-  
+ 
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -215,10 +229,10 @@ export default function Home() {
           <Canvas style={{ height: 400, width: '100%' }}>
             <ambientLight />
             <Previewer
-              width={formData.Roof_Area / 10 || 1}
+              width={formData.Length / 10 || 1}
               height={formData.Building_Height / 10 || 1}
-              depth={formData.Roof_Area / 10 || 1}
-              modelPath="courtyard.glb"
+              depth={formData.Width / 10 || 1}
+              modelPath={getModelPath()} // Dynamically pass the correct model path
               color={color}
               specificPartColor={'#7bc379'}
             />
