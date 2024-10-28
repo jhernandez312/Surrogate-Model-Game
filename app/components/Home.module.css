@@ -1,111 +1,109 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: Arial, sans-serif;
-}
-
-  
-.headerTitle {
-    font-size: 20px; /* Reduce the font size */
-    font-weight: bold;
-    text-align: center; /* Ensure the text is centered */
-}
-  
-
-.nav {
-    display: flex;
-    gap: 15px;
-}
-
-.header {
-    display: flex;
-    justify-content: center; /* Keep the title centered */
-    align-items: center;
-    padding: 10px;
-    position: relative; /* Add relative positioning */
-    width: 100%; /* Ensure full width for proper positioning */
-    box-sizing: border-box;
-  }
-  
-  .leaderboardLink {
-    position: absolute;
-    right: 20px; /* Adjust this value to control the distance from the right edge */
-    top: 10px; /* Adjust this value to control the distance from the top */
-    color: #0070f3;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
-  .leaderboardLink:hover {
-    text-decoration: underline;
-  }
-  
-
-.content {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1000px;
-}
-
-.form {
-    display: flex;
-    flex-direction: column;
-    width: 40%;
-}
-
-.previewSection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 55%;
-}
-
-.leaderboardContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh; /* Full viewport height */
-  position: relative;
+  font-family: Arial, sans-serif;
 }
 
-.topRightButton {
+.headerTitle {
+  font-size: 20px; /* Reduce the font size */
+  font-weight: bold;
+  text-align: center; /* Ensure the text is centered */
+}
+
+.nav {
+  display: flex;
+  gap: 15px;
+}
+
+.header {
+  display: flex;
+  justify-content: center; /* Keep the title centered */
+  align-items: center;
+  padding: 10px;
+  position: relative; /* Add relative positioning */
+  width: 100%; /* Ensure full width for proper positioning */
+  box-sizing: border-box;
+}
+
+.leaderboardLink {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  right: 20px; /* Adjust this value to control the distance from the right edge */
+  top: 10px; /* Adjust this value to control the distance from the top */
+  color: #0070f3;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.leaderboardLink:hover {
+  text-decoration: underline;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+
+.previewSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 55%; /* Adjust the preview section width */
+}
+
+.leaderboardContainer {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+width: 100%; /* Full width to match the previewer */
+max-width: 700px; /* Same max width as the preview section */
 }
 
 .centeredTable {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+margin-top: 20px; /* Space between the button and leaderboard */
 }
 
 .leaderboardTable {
-  border-collapse: collapse;
-  width: 700px; /* Adjusted to make the table wider */
-  text-align: left;
+border-collapse: collapse;
+width: 100%; /* Make the table fill the container */
+text-align: left;
 }
 
 .leaderboardTable th, .leaderboardTable td {
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  color: #f2f2f2;
+padding: 12px 15px;
+border: 1px solid #ddd;
+color: #f2f2f2;
 }
 
 .leaderboardTable th {
-  background-color: #333;
-  color: #f2f2f2;
-  font-weight: bold;
+background-color: #333;
+color: #f2f2f2;
+font-weight: bold;
 }
 
 .leaderboardTable td {
-  background-color: #444;
+background-color: #444;
 }
 
 .leaderboardTable tr:nth-child(even) {
-  background-color: #555;
+background-color: #555;
+}
+
+.refreshButton {
+margin-bottom: 20px;
+/* You can add more styles to the refresh button if needed */
 }

@@ -9,6 +9,7 @@ import styles from './components/Home.module.css';
 import Link from 'next/link';
 import FormSelect from './components/FormSelect';
 import defaultBuildings from './data/defaultBuilding.json'; // Adjust the path as necessary
+import Leaderboard from './components/Leaderboard'; // Import the Leaderboard component
 
 interface FormData {
   Building_Type: string;
@@ -170,9 +171,6 @@ export default function Home() {
     <div className={styles.container}>
       <header className={styles.header}>
         <h1 className={styles.headerTitle}>Your Energy Bill Predictor</h1>
-        <Link href="/leaderboard" className={styles.leaderboardLink}>
-          Leaderboard
-        </Link>
       </header>
 
       <div className={styles.content}>
@@ -315,6 +313,7 @@ export default function Home() {
           </Canvas>
 
           <RunButton formData={formData} />
+          <Leaderboard />
         </div>
       </div>
     </div>
