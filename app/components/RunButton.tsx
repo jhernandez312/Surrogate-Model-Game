@@ -2,13 +2,16 @@ import { useState, useEffect } from 'react';
 import styles from './RunButton.module.css';
 
 interface FormValues {
-  relativeCompactness: number;
-  surfaceArea: number;
-  roofArea: number;
-  overallHeight: number;
-  orientation: number;
-  glazingArea: number;
-  glazingAreaDistribution: number;
+  Building_Type: string;
+  Building_Shape: string;
+  Orientation: number;
+  Building_Stories: number;
+  energy_code: string;
+  hvac_category: string;
+  Building_Height: number;
+  Wall_Area: number;
+  Window_Area: number;
+  Roof_Area: number;
 }
 
 interface RunButtonProps {
@@ -37,7 +40,7 @@ export default function RunButton({ formData }: RunButtonProps) {
       });
 
       const data = await response.json();
-      
+
       const heatingDemand = data.prediction; // Assuming this is the heating load prediction from the API
       const buildingType = 'Office'; // You can replace this with dynamic data if needed
 

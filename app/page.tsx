@@ -1,6 +1,6 @@
 'use client'; // Add this line at the top
 
-import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, useCallback, ChangeEvent, FormEvent } from 'react';
 import { Canvas } from '@react-three/fiber';
 import FormInput from './components/FormInput';
 import Previewer from './components/Previewer';
@@ -50,8 +50,6 @@ export default function Home() {
     Roof_Area: initialBuilding?.X9_RoofArea || 0,
   });
 
-  const [color, setColor] = useState("#58afef");
-
   // Dynamically update modelPath based on the selected building shape
   const getModelPath = () => {
     switch (formData.Building_Shape) {
@@ -66,14 +64,8 @@ export default function Home() {
     }
   };
 
-  const handleColorChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setColor(e.target.value);
-  };
-
-  const calculateDependentVariables = () => {
+  const calculateDependentVariables = useCallback(() => {
     const { Length, Width, Floor_Height, Building_Stories, WWR, Building_Shape } = formData;
-
-    console.log('Recalculating dependent variables for:', { Length, Width, Floor_Height, Building_Stories, WWR, Building_Shape });
 
     let Building_Height = 0,
       Wall_Area = 0,
@@ -84,17 +76,17 @@ export default function Home() {
       Roof_Area = Length * Width;
       Building_Height = Floor_Height * Building_Stories;
       Wall_Area = 2 * (Length + Width) * Building_Height;
-      Window_Area = Wall_Area * (WWR / 100); // Adjusted to percentage
+      Window_Area = Wall_Area * (WWR);
     } else if (Building_Shape === 'L shape') {
       Roof_Area = 5 * (Length * Width) / 9;
       Building_Height = Floor_Height * Building_Stories;
       Wall_Area = 2 * (Length + Width) * Building_Height;
-      Window_Area = Wall_Area * (WWR / 100);
+      Window_Area = Wall_Area * (WWR);
     } else if (Building_Shape === 'T shape') {
       Roof_Area = 5 * (Length * Width) / 9;
       Building_Height = Floor_Height * Building_Stories;
       Wall_Area = 2 * (Length + Width) * Building_Height;
-      Window_Area = Wall_Area * (WWR / 100);
+      Window_Area = Wall_Area * (WWR);
     }
 
     setFormData((prevData) => ({
@@ -104,7 +96,8 @@ export default function Home() {
       Window_Area,
       Roof_Area,
     }));
-  };
+  }, [formData]);
+
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -228,8 +221,10 @@ export default function Home() {
             label="Building Stories:"
             name="Building_Stories"
             value={formData.Building_Stories.toString()}
-            readOnly
+            readOnly={true}
+            onChange={() => {}}  // Provide an empty function to satisfy TypeScript
           />
+
 
           {/* Handle the slider separately to update Building_Stories */}
           <input
@@ -248,7 +243,8 @@ export default function Home() {
             label="Window to Wall Ratio (WWR):"
             name="WWR"
             value={formData.WWR.toString()}
-            readOnly
+            readOnly={true}
+            onChange={() => {}}  // Provide an empty function to satisfy TypeScript
           />
 
           {/* Handle the slider separately to update WWR */}
@@ -299,7 +295,7 @@ export default function Home() {
               height={formData.Building_Height / 10 || 1}
               depth={formData.Width / 10 || 1}
               modelPath={getModelPath()}
-              color={color}
+              color={"#58afef"}
               specificPartColor={'#7bc379'}
             />
           </Canvas>

@@ -5,8 +5,22 @@ import Link from 'next/link';
 import styles from '../components/Home.module.css'; // Import your CSS file
 import defaultBuildings from '../data/defaultBuilding.json'; // Path to defaultBuilding.json
 
+// Define an interface for the simulation results
+interface SimulationResult {
+  building_type: string;
+  heating_demand?: number;
+  cooling_demand?: number;
+}
+
+interface DefaultBuilding {
+  X1_Type: string;
+  Y1_Heating?: number;
+  Y2_Cooling?: number;
+}
+
 export default function Leaderboard() {
-  const [simulationData, setSimulationData] = useState([]);
+  // Use the interface to type the state
+  const [simulationData, setSimulationData] = useState<SimulationResult[]>([]);
 
   // Function to load simulation data from localStorage
   const loadSimulationData = () => {
@@ -19,12 +33,14 @@ export default function Leaderboard() {
   }, []);
 
   // Function to calculate percent improvement
-  const calculatePercentImprovement = (result) => {
+  const calculatePercentImprovement = (result: SimulationResult): string => {
     const resultHeating = result.heating_demand || 0;
     const resultCooling = result.cooling_demand || 0;
     const resultTotalDemand = resultHeating + resultCooling;
 
-    const defaultBuilding = defaultBuildings.find((building) => building.X1_Type === result.building_type);
+    const defaultBuilding = defaultBuildings.find(
+      (building: DefaultBuilding) => building.X1_Type === result.building_type
+    );
 
     if (defaultBuilding) {
       const defaultHeating = defaultBuilding.Y1_Heating || 0;
@@ -97,7 +113,7 @@ export default function Leaderboard() {
             ))}
             {sortedSimulationData.length === 0 && (
               <tr>
-                <td colSpan="5" style={{ textAlign: 'center' }}>No simulation results available</td>
+                <td colSpan={5} style={{ textAlign: 'center' }}>No simulation results available</td>
               </tr>
             )}
           </tbody>

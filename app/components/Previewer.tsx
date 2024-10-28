@@ -1,12 +1,19 @@
 'use client'; // Marks this as a React client component
 
 import React, { useRef, useEffect, useState } from 'react';
-import { useThree } from '@react-three/fiber';
-import { useLoader } from '@react-three/fiber';
+import { useThree, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'; // Correctly import GLTFLoader
 import { useDrag } from '@use-gesture/react';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
+
+interface GLTFResult extends THREE.Object3D {
+  animations: THREE.AnimationClip[];
+  scene: THREE.Group;
+  scenes: THREE.Group[];
+  cameras: THREE.Camera[];
+  asset: object;
+}
 
 interface PreviewerProps {
   width: number;
@@ -24,10 +31,10 @@ const Previewer: React.FC<PreviewerProps> = ({ width, height, depth, modelPath, 
   scene.background = new THREE.Color(0xd3d3d3); // Set the scene background to a light grey
 
   // Track the camera distance based on the model size
-  const [cameraPosition, setCameraPosition] = useState([0, 5, Math.max(width, height, depth) * 7]);
+  const [cameraPosition, setCameraPosition] = useState<[number, number, number]>([0, 5, Math.max(width, height, depth) * 7]);
 
-  // Load the GLTF model
-  const gltf = useLoader(GLTFLoader, modelPath);
+  // Load the GLTF model and assert the type as GLTFResult
+  const gltf = useLoader(GLTFLoader, modelPath) as GLTFResult; // Use correct type assertion
 
   // Drag interaction using `useDrag`
   const bind = useDrag(
@@ -42,7 +49,7 @@ const Previewer: React.FC<PreviewerProps> = ({ width, height, depth, modelPath, 
         }
       }
     },
-    { pointerEvents: true }
+    {} // Removed the invalid `pointerEvents` option
   );
 
   // Ensure the model scales based on the input width, height, and depth independently
@@ -115,7 +122,7 @@ const Previewer: React.FC<PreviewerProps> = ({ width, height, depth, modelPath, 
         aspect={size.width / size.height} // Aspect ratio based on canvas size
         near={0.1}
         far={10000}
-        position={cameraPosition}
+        position={cameraPosition} // Pass the camera position
       />
 
       {/* Orbit Controls for zoom and rotation with reduced speed */}
