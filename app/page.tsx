@@ -23,7 +23,7 @@ interface FormData {
   hvac_category: string;
   Building_Height: number;
   Wall_Area: number;
-  Total_Glazing_Area: number;
+  Window_Area: number;
   Roof_Area: number;
 }
 
@@ -46,10 +46,9 @@ export default function Home() {
     hvac_category: initialBuilding?.X12_HVAC || 'Small Packaged Unit',
     Building_Height: 0,
     Wall_Area: 0,
-    Total_Glazing_Area: 0,
+    Window_Area: 0,
     Roof_Area: initialBuilding?.X9_RoofArea || 0,
   });
-
 
   const [color, setColor] = useState("#58afef");
 
@@ -78,44 +77,64 @@ export default function Home() {
 
     let Building_Height = 0,
       Wall_Area = 0,
-      Total_Glazing_Area = 0,
+      Window_Area = 0,
       Roof_Area = 0;
 
     if (Building_Shape === 'Wide rectangle') {
       Roof_Area = Length * Width;
       Building_Height = Floor_Height * Building_Stories;
       Wall_Area = 2 * (Length + Width) * Building_Height;
-      Total_Glazing_Area = Wall_Area * (WWR);
+      Window_Area = Wall_Area * (WWR / 100); // Adjusted to percentage
     } else if (Building_Shape === 'L shape') {
       Roof_Area = 5 * (Length * Width) / 9;
       Building_Height = Floor_Height * Building_Stories;
       Wall_Area = 2 * (Length + Width) * Building_Height;
-      Total_Glazing_Area = Wall_Area * (WWR);
+      Window_Area = Wall_Area * (WWR / 100);
     } else if (Building_Shape === 'T shape') {
       Roof_Area = 5 * (Length * Width) / 9;
       Building_Height = Floor_Height * Building_Stories;
       Wall_Area = 2 * (Length + Width) * Building_Height;
-      Total_Glazing_Area = Wall_Area * (WWR);
+      Window_Area = Wall_Area * (WWR / 100);
     }
 
     setFormData((prevData) => ({
       ...prevData,
       Building_Height,
       Wall_Area,
-      Total_Glazing_Area,
+      Window_Area,
       Roof_Area,
     }));
   };
 
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
 
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    // Convert to number if the field is numeric
+    const numericFields = [
+      'Length',
+      'Width',
+      'Orientation',
+      'Floor_Height',
+      'Building_Stories',
+      'WWR',
+    ];
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: numericFields.includes(name) ? Number(value) : value,
+    }));
+  };
+
+  const handleBuildingTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedBuildingType = e.target.value;
-  
+
     // Find the corresponding building type in defaultBuildings JSON
     const selectedBuilding = defaultBuildings.find(
       (building) => building.X1_Type === selectedBuildingType
     );
-  
+
     if (selectedBuilding) {
       // Update formData with default building settings
       setFormData({
@@ -125,31 +144,29 @@ export default function Home() {
         Orientation: selectedBuilding.X3_Orientation,
         Floor_Height: selectedBuilding.X15_FloorHeight,
         Building_Stories: selectedBuilding.X5_Stories,
-        WWR: selectedBuilding.X8_WWR, // Convert to percentage
+        WWR: selectedBuilding.X8_WWR,
         energy_code: selectedBuilding.X10_EnergyCode,
         hvac_category: selectedBuilding.X12_HVAC,
         Length: selectedBuilding.X13_Length,
         Width: selectedBuilding.X14_Width,
         Roof_Area: selectedBuilding.X9_RoofArea,
         Wall_Area: selectedBuilding.X6_WallArea,
-        Total_Glazing_Area: selectedBuilding.X7_WindowArea,
+        Window_Area: selectedBuilding.X7_WindowArea,
       });
     }
-  };  
-  
+  };
+
   useEffect(() => {
-    calculateDependentVariables();  // Recalculate dependent values when any independent variable changes
+    calculateDependentVariables(); // Recalculate dependent values when any independent variable changes
   }, [
-    formData.Building_Type, 
-    formData.Building_Shape, 
-    formData.Length, 
-    formData.Width, 
-    formData.Floor_Height, 
-    formData.Building_Stories, 
-    formData.WWR
+    formData.Building_Type,
+    formData.Building_Shape,
+    formData.Length,
+    formData.Width,
+    formData.Floor_Height,
+    formData.Building_Stories,
+    formData.WWR,
   ]);
-  
- 
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -167,30 +184,51 @@ export default function Home() {
 
       <div className={styles.content}>
         <form onSubmit={handleSubmit} className={styles.form}>
-        <FormSelect
-          label="Building Type:"
-          name="Building_Type"
-          value={formData.Building_Type}
-          onChange={handleChange} // Call the new handler function
-          options={defaultBuildings.map((building) => building.X1_Type)}
-        />
+          <FormSelect
+            label="Building Type:"
+            name="Building_Type"
+            value={formData.Building_Type}
+            onChange={handleBuildingTypeChange}
+            options={defaultBuildings.map((building) => building.X1_Type)}
+          />
 
           <FormSelect
             label="Building Shape:"
             name="Building_Shape"
             value={formData.Building_Shape}
-            onChange={handleChange}
+            onChange={handleInputChange}
             options={['Wide rectangle', 'L shape', 'T shape']}
           />
-          <FormInput label="Length (m):" name="Length" value={formData.Length.toString()} onChange={handleChange} />
-          <FormInput label="Width (m):" name="Width" value={formData.Width.toString()} onChange={handleChange} />
-          <FormInput label="Orientation (degrees):" name="Orientation" value={formData.Orientation.toString()} onChange={handleChange} />
-          <FormInput label="Floor Height (m):" name="Floor_Height" value={formData.Floor_Height.toString()} onChange={handleChange} />
+
+          <FormInput
+            label="Length (m):"
+            name="Length"
+            value={formData.Length.toString()}
+            onChange={handleInputChange}
+          />
+          <FormInput
+            label="Width (m):"
+            name="Width"
+            value={formData.Width.toString()}
+            onChange={handleInputChange}
+          />
+          <FormInput
+            label="Orientation (degrees):"
+            name="Orientation"
+            value={formData.Orientation.toString()}
+            onChange={handleInputChange}
+          />
+          <FormInput
+            label="Floor Height (m):"
+            name="Floor_Height"
+            value={formData.Floor_Height.toString()}
+            onChange={handleInputChange}
+          />
           <FormInput
             label="Building Stories:"
             name="Building_Stories"
             value={formData.Building_Stories.toString()}
-            readOnly // Keep this read-only so only the slider changes the value
+            readOnly
           />
 
           {/* Handle the slider separately to update Building_Stories */}
@@ -200,14 +238,17 @@ export default function Home() {
             min="1"
             max="14"
             value={formData.Building_Stories}
-            onChange={(e) => setFormData({ ...formData, Building_Stories: Number(e.target.value) })} // Directly update the Building_Stories value
-            style={{ width: '100%', marginTop: '1px' }} // Add your styling here
+            onChange={(e) =>
+              setFormData({ ...formData, Building_Stories: Number(e.target.value) })
+            }
+            style={{ width: '100%', marginTop: '1px' }}
           />
+
           <FormInput
             label="Window to Wall Ratio (WWR):"
             name="WWR"
             value={formData.WWR.toString()}
-            readOnly // Keep this read-only so only the slider changes the value
+            readOnly
           />
 
           {/* Handle the slider separately to update WWR */}
@@ -218,11 +259,36 @@ export default function Home() {
             max="76.1"
             step="0.1"
             value={formData.WWR}
-            onChange={(e) => setFormData({ ...formData, WWR: Number(e.target.value) })} // Directly update the WWR value
+            onChange={(e) =>
+              setFormData({ ...formData, WWR: Number(e.target.value) })
+            }
             style={{ width: '100%', marginTop: '1px' }}
           />
-          <FormSelect label="Energy Code:" name="energy_code" value={formData.energy_code} onChange={handleChange} options={['ComStock 90.1-2007', 'ComStock DOE Ref 1980-2004', 'ComStock 90.1-2004', 'ComStock DOE Ref Pre-1980']} />
-          <FormSelect label="HVAC Category:" name="hvac_category" value={formData.hvac_category} onChange={handleChange} options={['Small Packaged Unit', 'Multizone CAV/VAV', 'Zone-by-Zone', 'Residential Style Central Systems']} />
+
+          <FormSelect
+            label="Energy Code:"
+            name="energy_code"
+            value={formData.energy_code}
+            onChange={handleInputChange}
+            options={[
+              'ComStock 90.1-2007',
+              'ComStock DOE Ref 1980-2004',
+              'ComStock 90.1-2004',
+              'ComStock DOE Ref Pre-1980',
+            ]}
+          />
+          <FormSelect
+            label="HVAC Category:"
+            name="hvac_category"
+            value={formData.hvac_category}
+            onChange={handleInputChange}
+            options={[
+              'Small Packaged Unit',
+              'Multizone CAV/VAV',
+              'Zone-by-Zone',
+              'Residential Style Central Systems',
+            ]}
+          />
         </form>
 
         <div className={styles.previewSection}>
@@ -232,7 +298,7 @@ export default function Home() {
               width={formData.Length / 10 || 1}
               height={formData.Building_Height / 10 || 1}
               depth={formData.Width / 10 || 1}
-              modelPath={getModelPath()} // Dynamically pass the correct model path
+              modelPath={getModelPath()}
               color={color}
               specificPartColor={'#7bc379'}
             />
