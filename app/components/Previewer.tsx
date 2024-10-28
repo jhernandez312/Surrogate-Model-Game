@@ -1,5 +1,4 @@
 'use client'; // Marks this as a React client component
-
 import React, { useRef, useEffect, useState } from 'react';
 import { useThree, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -22,9 +21,10 @@ interface PreviewerProps {
   modelPath: string; // Path to the 3D model file (GLTF format)
   color: string; // Added color prop to change the model color dynamically
   specificPartColor: string; // Color for specific part(s) of the model
+  orientation?: [number, number, number]; // Added orientation prop for model rotation (X, Y, Z)
 }
 
-const Previewer: React.FC<PreviewerProps> = ({ width, height, depth, modelPath, color, specificPartColor }) => {
+const Previewer: React.FC<PreviewerProps> = ({ width, height, depth, modelPath, color, specificPartColor, orientation = [0, 0, 0] }) => {
   const modelRef = useRef<THREE.Group>(null!);
   const gridRef = useRef<THREE.GridHelper>(null!); // Reference to the grid
   const { camera, scene, size } = useThree();
@@ -62,8 +62,11 @@ const Previewer: React.FC<PreviewerProps> = ({ width, height, depth, modelPath, 
         (depth / 10) * scaleFactor
       ); // Scale the model independently based on width, height, and depth
       modelRef.current.position.set(0, (height / 10) * scaleFactor, 0); // Adjust the position to keep the model centered
+
+      // Apply the orientation prop to the model's rotation
+      modelRef.current.rotation.set(orientation[0], orientation[1], orientation[2]);
     }
-  }, [width, height, depth, gltf]);
+  }, [width, height, depth, gltf, orientation]);
 
   // Dynamically adjust the grid size and position based on the model size
   useEffect(() => {

@@ -310,6 +310,7 @@ export default function Home() {
               modelPath={getModelPath()}
               color={"#58afef"}
               specificPartColor={'#7bc379'}
+              orientation={[0, formData.Orientation, 0]} // Example orientation in radians
             />
           </Canvas>
 
