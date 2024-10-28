@@ -53,14 +53,29 @@ export default function Home() {
 
   const [color, setColor] = useState("#58afef");
 
+  // Dynamically update modelPath based on the selected building shape
+  const getModelPath = () => {
+    switch (formData.Building_Shape) {
+      case 'Wide rectangle':
+        return 'wideRectangle.glb'; // Path to the Wide Rectangle model
+      case 'L shape':
+        return 'lShape.glb'; // Path to the L Shape model
+      case 'T shape':
+        return 'tShape.glb'; // Path to the T Shape model
+      default:
+        return 'defaultModel.glb'; // Fallback model
+    }
+  };
+
   const handleColorChange = (e: ChangeEvent<HTMLInputElement>) => {
     setColor(e.target.value);
   };
+
   const calculateDependentVariables = () => {
     const { Length, Width, Floor_Height, Building_Stories, WWR, Building_Shape } = formData;
-  
+
     console.log('Recalculating dependent variables for:', { Length, Width, Floor_Height, Building_Stories, WWR, Building_Shape });
-  
+
     let Building_Area = 0,
       Aspect_Ratio = 0,
       Building_Height = 0,
@@ -68,7 +83,7 @@ export default function Home() {
       Wall_Area = 0,
       Total_Glazing_Area = 0,
       Roof_Area = 0;
-  
+
     if (Building_Shape === 'Wide rectangle') {
       Roof_Area = Length * Width;
       Aspect_Ratio = Length / Width;
@@ -94,7 +109,7 @@ export default function Home() {
       Total_Glazing_Area = Wall_Area * (WWR / 100);
       Building_Area = Roof_Area * 10.7639;
     }
-  
+
     setFormData((prevData) => ({
       ...prevData,
       Building_Area,
@@ -106,24 +121,18 @@ export default function Home() {
       Roof_Area,
     }));
   };
-  
-  
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-  
     setFormData({
       ...formData,
-      [name]: isNaN(Number(value)) ? value : Number(value),  // Handle numeric and non-numeric values properly
+      [name]: isNaN(Number(value)) ? value : Number(value), // Handle numeric and non-numeric values properly
     });
-  
   };
-  
-  
+
   useEffect(() => {
-    calculateDependentVariables();  // Recalculate dependent values when any independent variable changes
+    calculateDependentVariables(); // Recalculate dependent values when any independent variable changes
   }, [formData.Length, formData.Width, formData.Building_Stories, formData.WWR, formData.Building_Shape, formData.Floor_Height]);
-  
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -202,10 +211,10 @@ export default function Home() {
           <Canvas style={{ height: 400, width: '100%' }}>
             <ambientLight />
             <Previewer
-              width={formData.Building_Area / 10 || 1}
+              width={formData.Length / 10 || 1}
               height={formData.Building_Height / 10 || 1}
-              depth={formData.Roof_Area / 10 || 1}
-              modelPath="courtyard.glb"
+              depth={formData.Width / 10 || 1}
+              modelPath={getModelPath()} // Dynamically pass the correct model path
               color={color}
               specificPartColor={'#7bc379'}
             />
