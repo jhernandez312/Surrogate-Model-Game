@@ -184,13 +184,18 @@ export default function Home() {
 
       <div className={styles.content}>
         <form onSubmit={handleSubmit} className={styles.form}>
-          <FormSelect
-            label="Building Type:"
-            name="Building_Type"
-            value={formData.Building_Type}
-            onChange={handleBuildingTypeChange}
-            options={defaultBuildings.map((building) => building.X1_Type)}
-          />
+        <FormSelect
+          label="Building Type:"
+          name="Building_Type"
+          value={formData.Building_Type}
+          onChange={handleBuildingTypeChange}
+          options={defaultBuildings.map((building, index) => (
+            <option key={`${building.X1_Type}-${index}`} value={building.X1_Type}>
+              {building.X1_Type}
+            </option>
+          ))}
+        />
+
 
           <FormSelect
             label="Building Shape:"
