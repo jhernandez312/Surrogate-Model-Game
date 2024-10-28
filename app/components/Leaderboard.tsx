@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import styles from '../components/Home.module.css'; // Import your CSS file
-import defaultBuildings from '../data/defaultBuilding.json'; // Path to defaultBuilding.json
+import styles from './Home.module.css'; // You can create a separate CSS file for the leaderboard if needed
+import defaultBuildings from '../data/defaultBuilding.json';
 
-// Define an interface for the simulation results
 interface SimulationResult {
   building_type: string;
   heating_demand?: number;
@@ -19,20 +18,17 @@ interface DefaultBuilding {
 }
 
 export default function Leaderboard() {
-  // Use the interface to type the state
   const [simulationData, setSimulationData] = useState<SimulationResult[]>([]);
 
-  // Function to load simulation data from localStorage
   const loadSimulationData = () => {
     const data = localStorage.getItem('simulationResults') || '[]';
     setSimulationData(JSON.parse(data));
   };
 
   useEffect(() => {
-    loadSimulationData(); // Load data when the component is mounted
+    loadSimulationData();
   }, []);
 
-  // Function to calculate percent improvement
   const calculatePercentImprovement = (result: SimulationResult): string => {
     const resultHeating = result.heating_demand || 0;
     const resultCooling = result.cooling_demand || 0;
@@ -56,40 +52,19 @@ export default function Leaderboard() {
     return 'N/A';
   };
 
-  // Sort the simulation data based on percent improvement
   const sortedSimulationData = simulationData.slice().sort((a, b) => {
     const improvementA = parseFloat(calculatePercentImprovement(a).replace('%', '')) || 0;
     const improvementB = parseFloat(calculatePercentImprovement(b).replace('%', '')) || 0;
     return improvementB - improvementA;
   });
 
-  // Function to clear all simulation results from localStorage and the state
   const clearSimulationData = () => {
-    localStorage.removeItem('simulationResults'); // Remove the data from localStorage
-    setSimulationData([]); // Clear the state
+    localStorage.removeItem('simulationResults');
+    setSimulationData([]);
   };
 
   return (
     <div className={styles.leaderboardContainer}>
-      {/* Go Back button at the top right */}
-      <div className={styles.topRightButton}>
-        <Link href="/">
-          <button style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>
-            Go Back
-          </button>
-        </Link>
-      </div>
-
-      {/* Clear button to remove all simulation results */}
-      <div className={styles.refreshButton}>
-        <button
-          onClick={clearSimulationData} // Call the function to clear results
-          style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer', marginBottom: '20px' }}
-        >
-          Clear Results
-        </button>
-      </div>
-
       <div className={styles.centeredTable}>
         <table className={styles.leaderboardTable}>
           <thead>
@@ -108,7 +83,7 @@ export default function Leaderboard() {
                 <td>{result.building_type}</td>
                 <td>{result.heating_demand || 0}</td>
                 <td>{result.cooling_demand || 0}</td>
-                <td>{calculatePercentImprovement(result)}</td> {/* Percent improvement logic */}
+                <td>{calculatePercentImprovement(result)}</td>
               </tr>
             ))}
             {sortedSimulationData.length === 0 && (
@@ -119,6 +94,16 @@ export default function Leaderboard() {
           </tbody>
         </table>
       </div>
+  
+      {/* Move Clear Results button below the table */}
+      <div className={styles.refreshButton}>
+        <button
+          onClick={clearSimulationData}
+          style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer', marginTop: '20px' }}
+        >
+          Clear Results
+        </button>
+      </div>
     </div>
-  );
+  );  
 }
