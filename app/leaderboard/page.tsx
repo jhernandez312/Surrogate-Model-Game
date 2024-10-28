@@ -8,20 +8,22 @@ import defaultBuildings from '../data/defaultBuilding.json'; // Path to defaultB
 export default function Leaderboard() {
   const [simulationData, setSimulationData] = useState([]);
 
-  useEffect(() => {
-    // Fetch simulation data from localStorage
+  // Function to load simulation data from localStorage
+  const loadSimulationData = () => {
     const data = localStorage.getItem('simulationResults') || '[]';
     setSimulationData(JSON.parse(data));
+  };
+
+  useEffect(() => {
+    loadSimulationData(); // Load data when the component is mounted
   }, []);
 
   // Function to calculate percent improvement
   const calculatePercentImprovement = (result) => {
-    // Get the total heating and cooling demand from the result, defaulting to 0 if missing
     const resultHeating = result.heating_demand || 0;
     const resultCooling = result.cooling_demand || 0;
     const resultTotalDemand = resultHeating + resultCooling;
 
-    // Find the corresponding building type in the defaultBuildings JSON
     const defaultBuilding = defaultBuildings.find((building) => building.X1_Type === result.building_type);
 
     if (defaultBuilding) {
@@ -29,14 +31,12 @@ export default function Leaderboard() {
       const defaultCooling = defaultBuilding.Y2_Cooling || 0;
       const defaultTotalDemand = defaultHeating + defaultCooling;
 
-      // Calculate the percent improvement: ((Default - Result) / Default) * 100
       if (defaultTotalDemand > 0) {
         const percentImprovement = (((defaultTotalDemand - resultTotalDemand) / defaultTotalDemand) * 100).toFixed(2);
-        return `${percentImprovement}%`; // Add percent sign here
+        return `${percentImprovement}%`;
       }
     }
 
-    // If no default building or zero default demand, return N/A
     return 'N/A';
   };
 
@@ -44,8 +44,14 @@ export default function Leaderboard() {
   const sortedSimulationData = simulationData.slice().sort((a, b) => {
     const improvementA = parseFloat(calculatePercentImprovement(a).replace('%', '')) || 0;
     const improvementB = parseFloat(calculatePercentImprovement(b).replace('%', '')) || 0;
-    return improvementB - improvementA; // Sort in descending order
+    return improvementB - improvementA;
   });
+
+  // Function to clear all simulation results from localStorage and the state
+  const clearSimulationData = () => {
+    localStorage.removeItem('simulationResults'); // Remove the data from localStorage
+    setSimulationData([]); // Clear the state
+  };
 
   return (
     <div className={styles.leaderboardContainer}>
@@ -56,6 +62,16 @@ export default function Leaderboard() {
             Go Back
           </button>
         </Link>
+      </div>
+
+      {/* Clear button to remove all simulation results */}
+      <div className={styles.refreshButton}>
+        <button
+          onClick={clearSimulationData} // Call the function to clear results
+          style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer', marginBottom: '20px' }}
+        >
+          Clear Results
+        </button>
       </div>
 
       <div className={styles.centeredTable}>
@@ -79,6 +95,11 @@ export default function Leaderboard() {
                 <td>{calculatePercentImprovement(result)}</td> {/* Percent improvement logic */}
               </tr>
             ))}
+            {sortedSimulationData.length === 0 && (
+              <tr>
+                <td colSpan="5" style={{ textAlign: 'center' }}>No simulation results available</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
