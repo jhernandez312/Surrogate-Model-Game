@@ -6,13 +6,16 @@ export async function POST(request: Request) {
 
         // Extract form values sent from the client
         const {
-            relativeCompactness,
-            surfaceArea,
-            roofArea,
-            overallHeight,
-            orientation,
-            glazingArea,
-            glazingAreaDistribution,
+            Building_Type,
+            Building_Shape,
+            Orientation,
+            Building_Stories,
+            energy_code,
+            hvac_category,
+            Building_Height,
+            Wall_Area,
+            Window_Area,
+            Roof_Area,
         } = data;
 
         // Send the form data to the Flask API for prediction
@@ -22,13 +25,16 @@ export async function POST(request: Request) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                relativeCompactness,
-                surfaceArea,
-                roofArea,
-                overallHeight,
-                orientation,
-                glazingArea,
-                glazingAreaDistribution,
+                Building_Type,
+                Building_Shape,
+                Orientation,
+                Building_Stories,
+                energy_code,
+                hvac_category,
+                Building_Height,
+                Wall_Area,
+                Window_Area,
+                Roof_Area,
             }),
         });
 
