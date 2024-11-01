@@ -43,7 +43,7 @@ export default function RunButton({ formData }: RunButtonProps) {
       const data = await response.json();
 
       const heatingDemand = data.prediction; // Assuming this is the heating load prediction from the API
-      const buildingType = 'Office'; // You can replace this with dynamic data if needed
+      const buildingType = formData.Building_Type; // You can replace this with dynamic data if needed
 
       // Store the result in localStorage for the leaderboard
       const newResult = {
