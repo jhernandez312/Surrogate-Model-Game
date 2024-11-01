@@ -9,13 +9,13 @@ export async function POST(request: Request) {
             Building_Type,
             Building_Shape,
             Orientation,
-            Building_Stories,
-            energy_code,
-            hvac_category,
             Building_Height,
+            Building_Stories,
             Wall_Area,
             Window_Area,
             Roof_Area,
+            energy_code,
+            hvac_category,
         } = data;
 
         // Send the form data to the Flask API for prediction
@@ -28,13 +28,13 @@ export async function POST(request: Request) {
                 Building_Type,
                 Building_Shape,
                 Orientation,
-                Building_Stories,
-                energy_code,
-                hvac_category,
                 Building_Height,
+                Building_Stories,
                 Wall_Area,
                 Window_Area,
                 Roof_Area,
+                energy_code,
+                hvac_category,
             }),
         });
 

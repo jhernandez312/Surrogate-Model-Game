@@ -5,13 +5,13 @@ interface FormValues {
   Building_Type: string;
   Building_Shape: string;
   Orientation: number;
-  Building_Stories: number;
-  energy_code: string;
-  hvac_category: string;
   Building_Height: number;
+  Building_Stories: number;
   Wall_Area: number;
   Window_Area: number;
   Roof_Area: number;
+  energy_code: string;
+  hvac_category: string;
 }
 
 interface RunButtonProps {
