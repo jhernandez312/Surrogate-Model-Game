@@ -13,7 +13,7 @@ model = load(open('xgbr_model_Y1.sav', 'rb'))
 # Load pre-fitted label encoders and scaler (these should be fitted with the training data)
 label_encoders = {
     'X1_Type': LabelEncoder(),
-    'X2_Shape': LabelEncoder(),
+    'X3_Shape': LabelEncoder(),
     'X10_EnergyCode': LabelEncoder(),
     'X12_HVAC': LabelEncoder()
 }
@@ -35,7 +35,7 @@ label_encoders['X1_Type'].fit([
     "Office",
     "PrimarySchool"
 ])  # Replace with actual categories
-label_encoders['X2_Shape'].fit(['Wide rectangle', 'L shape', 'T shape'])    # Replace with actual categories
+label_encoders['X3_Shape'].fit(['Wide rectangle', 'L shape', 'T shape'])    # Replace with actual categories
 label_encoders['X10_EnergyCode'].fit(['ComStock 90.1-2007', 'ComStock DOE Ref 1980-2004', 'ComStock 90.1-2004', 'ComStock DOE Ref Pre-1980'])  # Replace with actual categories
 label_encoders['X12_HVAC'].fit(['Small Packaged Unit', 'Multizone CAV/VAV', 'Zone-by-Zone', 'Residential Style Central Systems'])  # Replace with actual categories
  
@@ -51,19 +51,15 @@ def predict():
     # Convert the incoming JSON data to a DataFrame
     df = pd.DataFrame({
         'X1_Type': [data['Building_Type']],
-        'X2_Shape': [data['Building_Shape']],
-        'X3_Orientation': [data['Orientation']],
-        'X5_Stories': [data['Building_Stories']],
-        'X6_WallArea': [data['Wall_Area']],
-        'X7_WindowArea': [data['Window_Area']],
-        'X8_WWR': [data['WWR']],
-        'X9_RoofArea': [data['Roof_Area']],
+        'X3_Shape': [data['Building_Shape']],
+        'X5_Orientation': [data['Orientation']],
+        'X6_Height': [data['Building_Height']],
+        'X7_Stories': [data['Building_Stories']],
+        'X9_WallArea': [data['Wall_Area']],
+        'X10_WindowArea': [data['Window_Area']],
+        'X12_RoofArea': [data['Roof_Area']],
         'X10_EnergyCode': [data['energy_code']],
         'X12_HVAC': [data['hvac_category']],
-        'X13_Length': [data['Length']],
-        'X14_Width': [data['Width']],
-        'X15_FloorHeight': [data['Floor_Height']],
-        'Building_Height': [data['Building_Height']]
     })
  
     # Apply label encoding for categorical variables
