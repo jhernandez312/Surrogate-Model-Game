@@ -30,6 +30,7 @@ export default function RunButton({ formData }: RunButtonProps) {
   }, []);
 
   const handleRun = async () => {
+    console.log('FormValues:', JSON.stringify(formData)); // Print FormValues to the console
     try {
       const response = await fetch('https://surrogate-model-game-1-vagb.onrender.com/predict', {
         method: 'POST',
@@ -66,6 +67,7 @@ export default function RunButton({ formData }: RunButtonProps) {
       alert('Failed to predict');
     }
   };
+
 
   return (
     <button onClick={handleRun} className={styles.runButton}>
