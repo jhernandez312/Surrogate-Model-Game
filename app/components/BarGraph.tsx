@@ -7,6 +7,9 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import styles from './Home.module.css';
 import defaultBuildings from '../data/defaultBuilding.json';
 import { Context } from 'chartjs-plugin-datalabels';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
@@ -37,11 +40,13 @@ export default function BarGraph() {
     return () => darkModeQuery.removeEventListener('change', handleChange);
   }, []);
 
+  // Function to load data from localStorage
   const loadSimulationData = () => {
     const data = localStorage.getItem('simulationResults') || '[]';
     setSimulationData(JSON.parse(data));
   };
 
+  // Load data initially on component mount
   useEffect(() => {
     loadSimulationData();
   }, []);
@@ -111,9 +116,9 @@ export default function BarGraph() {
           return improvement < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)'; // Red for negative, green for positive
         },
         formatter: (_value: number, context: Context) => `${improvementValues[context.dataIndex]}%`,
-        anchor: 'end' as const, // Place the label outside the bar
-        align: 'end' as const,  // Align the label at the end (above the bar)
-        offset: -5, // Adjust this to position the label right above the bar
+        anchor: 'end' as const,
+        align: 'end' as const,
+        offset: -5,
         font: {
           weight: 'bold' as const,
         },
@@ -144,16 +149,20 @@ export default function BarGraph() {
     },
   };
 
-
   const clearResults = () => {
-    localStorage.removeItem('simulationResults'); // Clear results from localStorage
-    setSimulationData([]); // Reset the state to refresh the chart
+    localStorage.removeItem('simulationResults');
+    setSimulationData([]);
   };
 
   return (
     <div className={styles.barGraphContainer}>
       <Bar data={data} options={options} />
-      <button onClick={clearResults} className={styles.clearButton}>Clear Results</button> {/* Centered, blue Clear Results button */}
+      <button onClick={loadSimulationData} className={styles.refreshButton}>
+        <FontAwesomeIcon icon={faSyncAlt} style={{ marginRight: '8px' }} />
+        Refresh Data
+      </button>
+
+      <button onClick={clearResults} className={styles.clearButton}>Clear Results</button>
     </div>
   );
 }
