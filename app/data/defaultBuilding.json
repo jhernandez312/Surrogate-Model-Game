@@ -14,8 +14,8 @@
         "X13_Length": 70.626,
         "X14_Width": 70.626,
         "X15_FloorHeight": 8.5344,
-        "Y1_Heating": 2.3691656969116583,
-        "Y2_Cooling": 1.1798648838152987
+        "Y1_Heating": 20.219407723722856,
+        "Y2_Cooling": 10.069438864433284
     },
     {
         "X1_Type": "StripMall",
@@ -32,8 +32,8 @@
         "X13_Length": 37.33,
         "X14_Width": 18.665,
         "X15_FloorHeight": 5.1816,
-        "Y1_Heating": 20.02010768663089,
-        "Y2_Cooling": 19.25688002989407
+        "Y1_Heating": 103.73618998904664,
+        "Y2_Cooling": 99.78144956289913
     },
     {
         "X1_Type": "Retail",
@@ -50,8 +50,8 @@
         "X13_Length": 37.33,
         "X14_Width": 18.665,
         "X15_FloorHeight": 6.096,
-        "Y1_Heating": 2.9226156591195993,
-        "Y2_Cooling": 6.534521295141064
+        "Y1_Heating": 17.816265057993082,
+        "Y2_Cooling": 39.83444181517993
     },
     {
         "X1_Type": "QuickServiceRestaurant",
@@ -68,8 +68,8 @@
         "X13_Length": 23.61,
         "X14_Width": 11.805,
         "X15_FloorHeight": 3.048,
-        "Y1_Heating": 11.068532116209635,
-        "Y2_Cooling": 58.187453181980835
+        "Y1_Heating": 33.73688589020696,
+        "Y2_Cooling": 177.35535729867757
     },
     {
         "X1_Type": "Hospital",
@@ -86,8 +86,8 @@
         "X13_Length": 90.161,
         "X14_Width": 45.081,
         "X15_FloorHeight": 4.2672,
-        "Y1_Heating": 37.37861280036827,
-        "Y2_Cooling": 13.042042752807346
+        "Y1_Heating": 159.5020165417315,
+        "Y2_Cooling": 55.65300483477951
     },
     {
         "X1_Type": "Outpatient",
@@ -104,8 +104,8 @@
         "X13_Length": 88.945,
         "X14_Width": 33.083,
         "X15_FloorHeight": 3.048,
-        "Y1_Heating": 1.4196496022038412,
-        "Y2_Cooling": 11.614078321356796
+        "Y1_Heating": 4.327091987517308,
+        "Y2_Cooling": 35.39971072349552
     },
     {
         "X1_Type": "Office",
@@ -122,8 +122,8 @@
         "X13_Length": 48.193,
         "X14_Width": 48.193,
         "X15_FloorHeight": 3.9624,
-        "Y1_Heating": 2.112139027060786,
-        "Y2_Cooling": 6.044341647415003
+        "Y1_Heating": 8.369139680825658,
+        "Y2_Cooling": 23.950099343717206
     },
     {
         "X1_Type": "FullServiceRestaurant",
@@ -140,8 +140,8 @@
         "X13_Length": 23.61,
         "X14_Width": 11.805,
         "X15_FloorHeight": 3.048,
-        "Y1_Heating": 33.98055709371177,
-        "Y2_Cooling": 44.503019827404
+        "Y1_Heating": 103.57273802163346,
+        "Y2_Cooling": 135.6452044339274
     },
     {
         "X1_Type": "SmallHotel",
@@ -158,8 +158,8 @@
         "X13_Length": 96.386,
         "X14_Width": 48.193,
         "X15_FloorHeight": 2.7432,
-        "Y1_Heating": 2.661534181295575,
-        "Y2_Cooling": 18.446390904098006
+        "Y1_Heating": 7.30112056613002,
+        "Y2_Cooling": 50.60213952812165
     },
     {
         "X1_Type": "SecondarySchool",
@@ -176,8 +176,8 @@
         "X13_Length": 442.322,
         "X14_Width": 225.928,
         "X15_FloorHeight": 3.9624,
-        "Y1_Heating": 19.870385806037092,
-        "Y2_Cooling": 15.453228154035937
+        "Y1_Heating": 78.73441671784138,
+        "Y2_Cooling": 61.231871237552
     },
     {
         "X1_Type": "LargeHotel",
@@ -194,8 +194,8 @@
         "X13_Length": 102.233,
         "X14_Width": 34.078,
         "X15_FloorHeight": 3.048,
-        "Y1_Heating": 2.9131984141896736,
-        "Y2_Cooling": 13.111158598131329
+        "Y1_Heating": 8.879428766450125,
+        "Y2_Cooling": 39.9628114071043
     },
     {
         "X1_Type": "PrimarySchool",
@@ -212,7 +212,7 @@
         "X13_Length": 510.239,
         "X14_Width": 54.624,
         "X15_FloorHeight": 3.9624,
-        "Y1_Heating": 29.752204270534197,
-        "Y2_Cooling": 14.889357709120018
+        "Y1_Heating": 117.89013420156469,
+        "Y2_Cooling": 58.99759098661716
     }
 ]
