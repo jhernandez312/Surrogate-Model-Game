@@ -93,23 +93,23 @@ export default function BarGraph() {
       legend: {
         position: 'top' as const,
         labels: {
-          color: isDarkMode ? '#ededed' : '#171717', // Change text color based on theme
+          color: isDarkMode ? '#ededed' : '#171717',
+          boxWidth: 20,
+          padding: 15,
         },
       },
       title: {
         display: true,
         text: 'Building Energy Demand in kWh',
-        color: isDarkMode ? '#ededed' : '#171717', // Change title color based on theme
+        color: isDarkMode ? '#ededed' : '#171717',
       },
       datalabels: {
         display: true,
-        color: (context) => {
-          const improvement = parseFloat(improvementValues[context.dataIndex]);
-          return improvement < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)'; // Red for negative, green for positive
-        },
-        formatter: (_value, context) => `${improvementValues[context.dataIndex]}%`, // Display percent improvement
-        anchor: 'end',
-        align: 'top',
+        color: 'white',
+        formatter: (_value, context) => `${improvementValues[context.dataIndex]}%`,
+        anchor: 'end', // Place the label outside the bar
+        align: 'end',  // Align the label at the end (above the bar)
+        offset: -5, // Adjust this to position the label right above the bar
         font: {
           weight: 'bold',
         },
@@ -118,12 +118,12 @@ export default function BarGraph() {
     scales: {
       x: {
         ticks: {
-          color: isDarkMode ? '#ededed' : '#171717', // Change x-axis ticks color based on theme
+          color: isDarkMode ? '#ededed' : '#171717',
         },
         title: {
           display: true,
           text: 'Attempt Number',
-          color: isDarkMode ? '#ededed' : '#171717', // Change x-axis title color based on theme
+          color: isDarkMode ? '#ededed' : '#171717',
         },
       },
       y: {
@@ -131,18 +131,25 @@ export default function BarGraph() {
         title: {
           display: true,
           text: 'Energy Demand (kWh)',
-          color: isDarkMode ? '#ededed' : '#171717', // Change y-axis title color based on theme
+          color: isDarkMode ? '#ededed' : '#171717',
         },
         ticks: {
-          color: isDarkMode ? '#ededed' : '#171717', // Change y-axis ticks color based on theme
+          color: isDarkMode ? '#ededed' : '#171717',
         },
       },
     },
   };
-
+  
+    
+  const clearResults = () => {
+    localStorage.removeItem('simulationResults'); // Clear results from localStorage
+    setSimulationData([]); // Reset the state to refresh the chart
+  };
+  
   return (
     <div className={styles.barGraphContainer}>
       <Bar data={data} options={options} />
+      <button onClick={clearResults} className={styles.clearButton}>Clear Results</button> {/* Centered, blue Clear Results button */}
     </div>
-  );
-}
+  );  
+}  

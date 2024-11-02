@@ -119,3 +119,21 @@
   margin: 20px auto;
   /* Center the graph and add spacing */
 }
+
+.clearButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff; /* Blue color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.clearButton:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
