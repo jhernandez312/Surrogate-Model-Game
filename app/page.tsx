@@ -183,7 +183,6 @@ export default function Home() {
             onChange={handleBuildingTypeChange}
             options={defaultBuildings.map((building) => building.X1_Type)}
           />
-
           <FormSelect
             label="Building Shape:"
             name="Building_Shape"
@@ -191,19 +190,23 @@ export default function Home() {
             onChange={handleInputChange}
             options={['Wide rectangle', 'L shape', 'T shape']}
           />
-
           <FormInput
             label="Length (m):"
             name="Length"
+            type="number" // Specify input type as number
+            step="0.01" // Allows decimals (e.g., two decimal places)
             value={formData.Length.toString()}
             onChange={handleInputChange}
           />
           <FormInput
             label="Width (m):"
             name="Width"
+            type="number" // Specify input type as number
+            step="0.01" // Allows decimals (e.g., two decimal places)
             value={formData.Width.toString()}
             onChange={handleInputChange}
           />
+
           <FormInput
             label="Orientation (degrees):"
             name="Orientation"
