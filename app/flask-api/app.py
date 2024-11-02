@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler, LabelEncoder
+from sklearn.preprocessing import LabelEncoder
+# from sklearn.preprocessing import MinMaxScaler
 from pickle import load
  
 app = Flask(__name__)

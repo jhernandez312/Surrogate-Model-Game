@@ -6,6 +6,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import styles from './Home.module.css';
 import defaultBuildings from '../data/defaultBuilding.json';
+import { Context } from 'chartjs-plugin-datalabels';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
@@ -93,37 +94,40 @@ export default function BarGraph() {
       legend: {
         position: 'top' as const,
         labels: {
-          color: isDarkMode ? '#ededed' : '#171717', // Change text color based on theme
+          color: isDarkMode ? '#ededed' : '#171717',
+          boxWidth: 20,
+          padding: 15,
         },
       },
       title: {
         display: true,
         text: 'Building Energy Demand in kWh',
-        color: isDarkMode ? '#ededed' : '#171717', // Change title color based on theme
+        color: isDarkMode ? '#ededed' : '#171717',
       },
       datalabels: {
         display: true,
-        color: (context) => {
+        color: (context: Context) => {
           const improvement = parseFloat(improvementValues[context.dataIndex]);
           return improvement < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)'; // Red for negative, green for positive
         },
-        formatter: (_value, context) => `${improvementValues[context.dataIndex]}%`, // Display percent improvement
-        anchor: 'end',
-        align: 'top',
+        formatter: (_value: number, context: Context) => `${improvementValues[context.dataIndex]}%`,
+        anchor: 'end' as const, // Place the label outside the bar
+        align: 'end' as const,  // Align the label at the end (above the bar)
+        offset: -5, // Adjust this to position the label right above the bar
         font: {
-          weight: 'bold',
+          weight: 'bold' as const,
         },
       },
     },
     scales: {
       x: {
         ticks: {
-          color: isDarkMode ? '#ededed' : '#171717', // Change x-axis ticks color based on theme
+          color: isDarkMode ? '#ededed' : '#171717',
         },
         title: {
           display: true,
           text: 'Attempt Number',
-          color: isDarkMode ? '#ededed' : '#171717', // Change x-axis title color based on theme
+          color: isDarkMode ? '#ededed' : '#171717',
         },
       },
       y: {
@@ -131,18 +135,25 @@ export default function BarGraph() {
         title: {
           display: true,
           text: 'Energy Demand (kWh)',
-          color: isDarkMode ? '#ededed' : '#171717', // Change y-axis title color based on theme
+          color: isDarkMode ? '#ededed' : '#171717',
         },
         ticks: {
-          color: isDarkMode ? '#ededed' : '#171717', // Change y-axis ticks color based on theme
+          color: isDarkMode ? '#ededed' : '#171717',
         },
       },
     },
   };
 
+
+  const clearResults = () => {
+    localStorage.removeItem('simulationResults'); // Clear results from localStorage
+    setSimulationData([]); // Reset the state to refresh the chart
+  };
+
   return (
     <div className={styles.barGraphContainer}>
       <Bar data={data} options={options} />
+      <button onClick={clearResults} className={styles.clearButton}>Clear Results</button> {/* Centered, blue Clear Results button */}
     </div>
   );
 }
