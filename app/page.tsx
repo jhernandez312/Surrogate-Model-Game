@@ -30,11 +30,11 @@ interface FormData {
 export default function Home() {
   // Find the initial default values from the "SmallOffice" type in defaultBuilding.json
   const initialBuilding = defaultBuildings.find(
-    (building) => building.X1_Type === 'SmallOffice'
+    (building) => building.X1_Type === 'Office'
   );
 
   const [formData, setFormData] = useState<FormData>({
-    Building_Type: initialBuilding?.X1_Type || 'SmallOffice',
+    Building_Type: initialBuilding?.X1_Type || 'Office',
     Length: initialBuilding?.X13_Length || 50,
     Width: initialBuilding?.X14_Width || 30,
     Building_Shape: initialBuilding?.X2_Shape || 'Wide rectangle',
@@ -76,17 +76,17 @@ export default function Home() {
       Roof_Area = Length * Width;
       Building_Height = Floor_Height * Building_Stories;
       Wall_Area = 2 * (Length + Width) * Building_Height;
-      Window_Area = Wall_Area * (WWR);
+      Window_Area = Wall_Area * (WWR / 100);
     } else if (Building_Shape === 'L shape') {
       Roof_Area = 5 * (Length * Width) / 9;
       Building_Height = Floor_Height * Building_Stories;
       Wall_Area = 2 * (Length + Width) * Building_Height;
-      Window_Area = Wall_Area * (WWR);
+      Window_Area = Wall_Area * (WWR / 100);
     } else if (Building_Shape === 'T shape') {
       Roof_Area = 5 * (Length * Width) / 9;
       Building_Height = Floor_Height * Building_Stories;
       Wall_Area = 2 * (Length + Width) * Building_Height;
-      Window_Area = Wall_Area * (WWR);
+      Window_Area = Wall_Area * (WWR / 100);
     }
 
     setFormData((prevData) => ({
@@ -223,11 +223,20 @@ export default function Home() {
             style={{ width: '100%', marginTop: '1px' }}
           />
 
-          <FormInput
+          <FormSelect
             label="Floor Height (m):"
             name="Floor_Height"
             value={formData.Floor_Height.toString()}
             onChange={handleInputChange}
+            options={[
+              '2.7432',
+              '3.048',
+              '3.9624',
+              '4.2672',
+              '5.1816',
+              '6.096',
+              '8.5344',
+            ]}
           />
           <FormInput
             label="Building Stories:"

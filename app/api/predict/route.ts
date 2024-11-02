@@ -6,29 +6,35 @@ export async function POST(request: Request) {
 
         // Extract form values sent from the client
         const {
-            relativeCompactness,
-            surfaceArea,
-            roofArea,
-            overallHeight,
-            orientation,
-            glazingArea,
-            glazingAreaDistribution,
+            Building_Type,
+            Building_Shape,
+            Orientation,
+            Building_Height,
+            Building_Stories,
+            Wall_Area,
+            Window_Area,
+            Roof_Area,
+            energy_code,
+            hvac_category,
         } = data;
 
         // Send the form data to the Flask API for prediction
-        const response = await fetch('https://surrogate-model-game-1-vagb.onrender.com/predict', {
+        const response = await fetch('http://localhost:5000/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                relativeCompactness,
-                surfaceArea,
-                roofArea,
-                overallHeight,
-                orientation,
-                glazingArea,
-                glazingAreaDistribution,
+                Building_Type,
+                Building_Shape,
+                Orientation,
+                Building_Height,
+                Building_Stories,
+                Wall_Area,
+                Window_Area,
+                Roof_Area,
+                energy_code,
+                hvac_category,
             }),
         });
 

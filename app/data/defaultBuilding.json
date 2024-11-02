@@ -90,24 +90,6 @@
         "Y2_Cooling": 1809616.667
     },
     {
-        "X1_Type": "SmallOffice",
-        "X2_Shape": "Wide rectangle",
-        "X3_Orientation": 45,
-        "X4_Height": 5.4864,
-        "X5_Stories": 2,
-        "X6_WallArea": 751.0639383,
-        "X7_WindowArea": 164.8676938,
-        "X8_WWR": 11.25,
-        "X9_RoofArea": 1741.932,
-        "X10_EnergyCode": "ComStock 90.1-2007",
-        "X12_HVAC": "Small Packaged Unit",
-        "X13_Length": 41.736,
-        "X14_Width": 41.736,
-        "X15_FloorHeight": 2.7432,
-        "Y1_Heating": 9661.111111,
-        "Y2_Cooling": 142200.0
-    },
-    {
         "X1_Type": "Outpatient",
         "X2_Shape": "Wide rectangle",
         "X3_Orientation": 90,
@@ -214,24 +196,6 @@
         "X15_FloorHeight": 3.048,
         "Y1_Heating": 61869.44444,
         "Y2_Cooling": 278450.0
-    },
-    {
-        "X1_Type": "Office",
-        "X2_Shape": "Wide rectangle",
-        "X3_Orientation": 225,
-        "X4_Height": 3.048,
-        "X5_Stories": 1,
-        "X6_WallArea": 302.5160367,
-        "X7_WindowArea": 19.30953425,
-        "X8_WWR": 2.1,
-        "X9_RoofArea": 696.7728,
-        "X10_EnergyCode": "ComStock 90.1-2007",
-        "X12_HVAC": "Zone-by-Zone",
-        "X13_Length": 26.396,
-        "X14_Width": 26.396,
-        "X15_FloorHeight": 3.048,
-        "Y1_Heating": 4338.888889,
-        "Y2_Cooling": 34650.0
     },
     {
         "X1_Type": "PrimarySchool",

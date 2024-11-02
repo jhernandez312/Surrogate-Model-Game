@@ -5,13 +5,13 @@ interface FormValues {
   Building_Type: string;
   Building_Shape: string;
   Orientation: number;
-  Building_Stories: number;
-  energy_code: string;
-  hvac_category: string;
   Building_Height: number;
+  Building_Stories: number;
   Wall_Area: number;
   Window_Area: number;
   Roof_Area: number;
+  energy_code: string;
+  hvac_category: string;
 }
 
 interface RunButtonProps {
@@ -30,8 +30,9 @@ export default function RunButton({ formData }: RunButtonProps) {
   }, []);
 
   const handleRun = async () => {
+    console.log('FormValues:', JSON.stringify(formData)); // Print FormValues to the console
     try {
-      const response = await fetch('https://surrogate-model-game-1-vagb.onrender.com/predict', {
+      const response = await fetch('http://localhost:5000/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +43,7 @@ export default function RunButton({ formData }: RunButtonProps) {
       const data = await response.json();
 
       const heatingDemand = data.prediction; // Assuming this is the heating load prediction from the API
-      const buildingType = 'Office'; // You can replace this with dynamic data if needed
+      const buildingType = formData.Building_Type; // You can replace this with dynamic data if needed
 
       // Store the result in localStorage for the leaderboard
       const newResult = {
@@ -66,6 +67,7 @@ export default function RunButton({ formData }: RunButtonProps) {
       alert('Failed to predict');
     }
   };
+
 
   return (
     <button onClick={handleRun} className={styles.runButton}>
