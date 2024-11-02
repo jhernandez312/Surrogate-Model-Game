@@ -67,7 +67,7 @@ def predict():
     print(df)
     
     # Make prediction
-    prediction = model.predict(scaled_data)
+    prediction = model.predict(scaled_data) / (data['Roof_Area'] * data['Building_Height'])
     print(prediction)
     
     # Return prediction as JSON
