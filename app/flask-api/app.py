@@ -34,7 +34,7 @@ label_encoders['X14_HVAC'].fit(['Small Packaged Unit', 'Multizone CAV/VAV', 'Zon
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
- 
+
     # Convert the incoming JSON data to a DataFrame
     df = pd.DataFrame({
         'X1_Type': [data['Building_Type']],
@@ -48,19 +48,30 @@ def predict():
         'X13_EnergyCode': [data['energy_code']],
         'X14_HVAC': [data['hvac_category']],
     })
- 
-    # Apply label encoding for categorical variables
-    for col, encoder in label_encoders.items():
-        df[col] = encoder.transform(df[col])
- 
+
+    # Load label encoder
+    encoder_paths = {
+        'X1_Type': r'X1_Type_label_encoder.pkl',
+        'X3_Shape': r'X3_Shape_label_encoder.pkl',
+        'X13_EnergyCode': r'X13_EnergyCode_label_encoder.pkl',
+        'X14_HVAC': r'X14_HVAC_label_encoder.pkl'
+    }
+
+    for col, path in encoder_paths.items():
+        with open(path, 'rb') as file:
+            encoder = load(file)
+            df[col] = encoder.transform(df[col])
+
     # Scale numeric features
     scaled_data = df
     print(df)
+    
     # Make prediction
     prediction = model.predict(scaled_data)
     print(prediction)
+    
     # Return prediction as JSON
     return jsonify({'prediction': prediction.tolist()})
- 
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
