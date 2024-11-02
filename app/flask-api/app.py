@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
  
 # Load the saved model
-model = load(open('xgbr_model_Y1.sav', 'rb'))
+model = load(open('xgbr_best_Y1_1.sav', 'rb'))
  
 # Load pre-fitted label encoders and scaler (these should be fitted with the training data)
 label_encoders = {
@@ -19,23 +19,10 @@ label_encoders = {
 }
  
 # Fit encoders with categories as used during training (example categories provided)
-label_encoders['X1_Type'].fit([
-    "Warehouse",
-    "StripMall",
-    "Retail",
-    "QuickServiceRestaurant",
-    "Hospital",
-    "SmallOffice",
-    "Outpatient",
-    "Office",
-    "FullServiceRestaurant",
-    "SmallHotel",
-    "SecondarySchool",
-    "LargeHotel",
-    "Office",
-    "PrimarySchool"
-])  # Replace with actual categories
-label_encoders['X3_Shape'].fit(['Wide rectangle', 'L shape', 'T shape'])    # Replace with actual categories
+label_encoders['X1_Type'].fit(['SmallHotel', 'Retail', 'Office', 'Warehouse', 'StripMall', 'Outpatient',
+                               'FullServiceRestaurant', 'QuickServiceRestaurant', 'LargeHotel', 
+                               'PrimarySchool', 'Hospital', 'SecondarySchool'])
+label_encoders['X3_Shape'].fit(['Wide rectangle', 'L shape', 'T shape'])
 label_encoders['X13_EnergyCode'].fit(['ComStock 90.1-2007', 'ComStock DOE Ref 1980-2004', 'ComStock 90.1-2004', 'ComStock DOE Ref Pre-1980'])  # Replace with actual categories
 label_encoders['X14_HVAC'].fit(['Small Packaged Unit', 'Multizone CAV/VAV', 'Zone-by-Zone', 'Residential Style Central Systems'])  # Replace with actual categories
  

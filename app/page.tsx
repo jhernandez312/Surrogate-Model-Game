@@ -30,11 +30,11 @@ interface FormData {
 export default function Home() {
   // Find the initial default values from the "SmallOffice" type in defaultBuilding.json
   const initialBuilding = defaultBuildings.find(
-    (building) => building.X1_Type === 'SmallOffice'
+    (building) => building.X1_Type === 'Office'
   );
 
   const [formData, setFormData] = useState<FormData>({
-    Building_Type: initialBuilding?.X1_Type || 'SmallOffice',
+    Building_Type: initialBuilding?.X1_Type || 'Office',
     Length: initialBuilding?.X13_Length || 50,
     Width: initialBuilding?.X14_Width || 30,
     Building_Shape: initialBuilding?.X2_Shape || 'Wide rectangle',
