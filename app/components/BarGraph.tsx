@@ -105,7 +105,7 @@ export default function BarGraph() {
       },
       datalabels: {
         display: true,
-        color: 'white',
+        color: isDarkMode ? '#ededed' : '#171717',
         formatter: (_value, context) => `${improvementValues[context.dataIndex]}%`,
         anchor: 'end', // Place the label outside the bar
         align: 'end',  // Align the label at the end (above the bar)
