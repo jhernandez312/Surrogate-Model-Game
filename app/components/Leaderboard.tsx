@@ -1,8 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react'; // Removed 'Link' since it's not used
-import styles from './Home.module.css'; // You can create a separate CSS file for the leaderboard if needed
+import { useState, useEffect } from 'react';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import defaultBuildings from '../data/defaultBuilding.json';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface SimulationResult {
   building_type: string;
@@ -16,7 +19,7 @@ interface DefaultBuilding {
   Y2_Cooling?: number;
 }
 
-export default function Leaderboard() {
+export default function BarGraph() {
   const [simulationData, setSimulationData] = useState<SimulationResult[]>([]);
 
   const loadSimulationData = () => {
@@ -44,64 +47,52 @@ export default function Leaderboard() {
 
       if (defaultTotalDemand > 0) {
         const percentImprovement = (((defaultTotalDemand - resultTotalDemand) / defaultTotalDemand) * 100).toFixed(2);
-        return `${percentImprovement}%`;
+        return percentImprovement;
       }
     }
 
-    return 'N/A';
+    return '0';
   };
 
-  const sortedSimulationData = simulationData.slice().sort((a, b) => {
-    const improvementA = parseFloat(calculatePercentImprovement(a).replace('%', '')) || 0;
-    const improvementB = parseFloat(calculatePercentImprovement(b).replace('%', '')) || 0;
-    return improvementB - improvementA;
-  });
+  const labels = simulationData.map((result) => result.building_type);
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Percent Improvement',
+        data: simulationData.map((result) => parseFloat(calculatePercentImprovement(result))),
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
 
-  const clearSimulationData = () => {
-    localStorage.removeItem('simulationResults');
-    setSimulationData([]);
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Building Energy Efficiency Improvements',
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Percent Improvement (%)',
+        },
+      },
+    },
   };
 
   return (
-    <div className={styles.leaderboardContainer}>
-      <div className={styles.centeredTable}>
-        <table className={styles.leaderboardTable}>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Building Type</th>
-              <th>Heating Demand</th>
-              <th>Cooling Demand</th>
-              <th>Percent Improvement</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedSimulationData.map((result, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{result.building_type}</td>
-                <td>{result.heating_demand || 0}</td>
-                <td>{result.cooling_demand || 0}</td>
-                <td>{calculatePercentImprovement(result)}</td>
-              </tr>
-            ))}
-            {sortedSimulationData.length === 0 && (
-              <tr>
-                <td colSpan={5} style={{ textAlign: 'center' }}>No simulation results available</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      <div className={styles.refreshButton}>
-        <button
-          onClick={clearSimulationData}
-          style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer', marginTop: '20px' }}
-        >
-          Clear Results
-        </button>
-      </div>
+    <div style={{ width: '90%', height: '500px', margin: '20px auto' }}>
+      <Bar data={data} options={options} />
     </div>
   );
 }

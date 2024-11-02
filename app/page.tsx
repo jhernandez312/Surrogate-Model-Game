@@ -9,6 +9,8 @@ import styles from './components/Home.module.css';
 import FormSelect from './components/FormSelect';
 import defaultBuildings from './data/defaultBuilding.json'; // Adjust the path as necessary
 import Leaderboard from './components/Leaderboard'; // Import the Leaderboard component
+import BarGraph from './components/BarGraph'; // Import the BarGraph component
+
 
 interface FormData {
   Building_Type: string;
@@ -312,7 +314,9 @@ export default function Home() {
           </Canvas>
 
           <RunButton formData={formData} />
-          <Leaderboard />
+          {/*<Leaderboard />*/}
+            <BarGraph /> {/* Add the BarGraph component here */}
+
         </div>
       </div>
     </div>

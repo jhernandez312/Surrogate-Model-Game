@@ -1,3 +1,4 @@
+/* Existing styles */
 .container {
   display: flex;
   flex-direction: column;
@@ -6,9 +7,11 @@
 }
 
 .headerTitle {
-  font-size: 20px; /* Reduce the font size */
+  font-size: 20px;
   font-weight: bold;
-  text-align: center; /* Ensure the text is centered */
+  text-align: center;
+  color: var(--foreground);
+  /* Adapt text color to dark mode */
 }
 
 .nav {
@@ -18,18 +21,18 @@
 
 .header {
   display: flex;
-  justify-content: center; /* Keep the title centered */
+  justify-content: center;
   align-items: center;
   padding: 10px;
-  position: relative; /* Add relative positioning */
-  width: 100%; /* Ensure full width for proper positioning */
+  position: relative;
+  width: 100%;
   box-sizing: border-box;
 }
 
 .leaderboardLink {
   position: absolute;
-  right: 20px; /* Adjust this value to control the distance from the right edge */
-  top: 10px; /* Adjust this value to control the distance from the top */
+  right: 20px;
+  top: 10px;
   color: #0070f3;
   text-decoration: none;
   font-weight: bold;
@@ -57,53 +60,62 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 55%; /* Adjust the preview section width */
+  width: 55%;
 }
 
 .leaderboardContainer {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-width: 100%; /* Full width to match the previewer */
-max-width: 700px; /* Same max width as the preview section */
+  background-color: var(--background);
+  /* Adapt background color */
+  color: var(--foreground);
+  /* Adapt text color */
 }
 
 .centeredTable {
-display: flex;
-justify-content: center;
-align-items: center;
-width: 100%;
-margin-top: 20px; /* Space between the button and leaderboard */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .leaderboardTable {
-border-collapse: collapse;
-width: 100%; /* Make the table fill the container */
-text-align: left;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
 }
 
-.leaderboardTable th, .leaderboardTable td {
-padding: 12px 15px;
-border: 1px solid #ddd;
-color: #f2f2f2;
+.leaderboardTable th,
+.leaderboardTable td {
+  color: var(--foreground);
+  /* Use adaptive color */
+  background-color: var(--background);
 }
 
 .leaderboardTable th {
-background-color: #333;
-color: #f2f2f2;
-font-weight: bold;
+  background-color: #333;
+  color: var(--foreground);
 }
 
 .leaderboardTable td {
-background-color: #444;
+  background-color: #444;
 }
 
 .leaderboardTable tr:nth-child(even) {
-background-color: #555;
+  background-color: #555;
 }
 
 .refreshButton {
-margin-bottom: 20px;
-/* You can add more styles to the refresh button if needed */
+  margin-bottom: 20px;
+}
+
+/* New styles for BarGraph component */
+.barGraphContainer {
+  width: 100%;
+  /* Set a larger width to fit nicely within the preview section */
+  max-width: 700px;
+  /* Match the leaderboard's max width */
+  height: 500px;
+  /* Increase height for better readability */
+  margin: 20px auto;
+  /* Center the graph and add spacing */
 }
