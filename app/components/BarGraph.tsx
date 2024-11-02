@@ -139,17 +139,17 @@ export default function BarGraph() {
       },
     },
   };
-  
-    
+
+
   const clearResults = () => {
     localStorage.removeItem('simulationResults'); // Clear results from localStorage
     setSimulationData([]); // Reset the state to refresh the chart
   };
-  
+
   return (
     <div className={styles.barGraphContainer}>
       <Bar data={data} options={options} />
       <button onClick={clearResults} className={styles.clearButton}>Clear Results</button> {/* Centered, blue Clear Results button */}
     </div>
-  );  
-}  
+  );
+}
