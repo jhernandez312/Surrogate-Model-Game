@@ -10,6 +10,7 @@ interface FormInputProps {
   id?: string; // optional ID
   type?: string; // input type, default to "text"
   placeholder?: string; // optional placeholder
+  step?: string;
 }
 
 export default function FormInput({

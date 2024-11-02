@@ -6,6 +6,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import styles from './Home.module.css';
 import defaultBuildings from '../data/defaultBuilding.json';
+import { Context } from 'chartjs-plugin-datalabels';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
@@ -105,16 +106,16 @@ export default function BarGraph() {
       },
       datalabels: {
         display: true,
-        color: (context) => {
+        color: (context: Context) => {
           const improvement = parseFloat(improvementValues[context.dataIndex]);
           return improvement < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)'; // Red for negative, green for positive
         },
-        formatter: (_value, context) => `${improvementValues[context.dataIndex]}%`,
-        anchor: 'end', // Place the label outside the bar
-        align: 'end',  // Align the label at the end (above the bar)
+        formatter: (_value: number, context: Context) => `${improvementValues[context.dataIndex]}%`,
+        anchor: 'end' as const, // Place the label outside the bar
+        align: 'end' as const,  // Align the label at the end (above the bar)
         offset: -5, // Adjust this to position the label right above the bar
         font: {
-          weight: 'bold',
+          weight: 'bold' as const,
         },
       },
     },
