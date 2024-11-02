@@ -8,7 +8,7 @@ import RunButton from './components/RunButton';
 import styles from './components/Home.module.css';
 import FormSelect from './components/FormSelect';
 import defaultBuildings from './data/defaultBuilding.json'; // Adjust the path as necessary
-import Leaderboard from './components/Leaderboard'; // Import the Leaderboard component
+// import Leaderboard from './components/Leaderboard'; // Import the Leaderboard component
 import BarGraph from './components/BarGraph'; // Import the BarGraph component
 
 
@@ -327,8 +327,7 @@ export default function Home() {
 
           <RunButton formData={formData} />
           {/*<Leaderboard />*/}
-            <BarGraph /> {/* Add the BarGraph component here */}
-
+          <BarGraph /> {/* Add the BarGraph component here */}
         </div>
       </div>
     </div>
