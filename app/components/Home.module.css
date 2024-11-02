@@ -106,6 +106,7 @@
 
 .refreshButton {
   margin-bottom: 20px;
+  background-color: var(--background);
 }
 
 /* New styles for BarGraph component */
