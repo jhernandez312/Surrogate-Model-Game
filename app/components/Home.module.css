@@ -119,6 +119,9 @@
   /* Increase height for better readability */
   margin: 20px auto;
   /* Center the graph and add spacing */
+  position: relative;
+  /* Add this to allow absolute positioning inside */
+
 }
 
 .clearButton {
@@ -148,4 +151,31 @@
   outline: 2px solid #93c5fd;
   /* Focus ring (lighter blue) */
   outline-offset: 2px;
+}
+
+.clearButton {
+  margin-top: 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+  background-color: #3b82f6;
+  /* Tailwind's blue-600 */
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.refreshButton {
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: 20px;
 }
