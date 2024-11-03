@@ -42,21 +42,24 @@ export default function RunButton({ formData }: RunButtonProps) {
 
       const data = await response.json();
 
-      const heatingDemand = data.prediction; // Assuming this is the heating load prediction from the API
-      const buildingType = formData.Building_Type; // You can replace this with dynamic data if needed
+      // Extract heating and cooling load predictions from the API response
+      const heatingDemand = data.heating_load_prediction;
+      const coolingDemand = data.cooling_load_prediction;
+      const buildingType = formData.Building_Type;
 
       // Store the result in localStorage for the leaderboard
       const newResult = {
         building_type: buildingType,
         heating_demand: heatingDemand,
-        attempt: attemptCount,  // Store the attempt number with the result
+        cooling_demand: coolingDemand,
+        attempt: attemptCount, // Store the attempt number with the result
       };
 
       const existingResults = JSON.parse(localStorage.getItem('simulationResults') || '[]');
       existingResults.push(newResult);
       localStorage.setItem('simulationResults', JSON.stringify(existingResults));
 
-      alert(`Predicted Heating Load: ${heatingDemand} (Attempt ${attemptCount})`);
+      alert(`Predicted Heating Load: ${heatingDemand} | Predicted Cooling Load: ${coolingDemand}`);
 
       // Increment the attempt counter and store in localStorage
       const nextAttempt = attemptCount + 1;
@@ -67,7 +70,6 @@ export default function RunButton({ formData }: RunButtonProps) {
       alert('Failed to predict');
     }
   };
-
 
   return (
     <button onClick={handleRun} className={styles.runButton}>
