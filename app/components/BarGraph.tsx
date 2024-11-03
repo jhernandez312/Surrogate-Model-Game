@@ -56,42 +56,42 @@ export default function BarGraph() {
   }, []);
 
   const calculateHeatingImprovement = (result: SimulationResult): string => {
-    const resultHeating = result.heating_demand || 0;
-
+    const resultHeating = typeof result.heating_demand === 'number' ? result.heating_demand : 0;
+  
     const defaultBuilding = defaultBuildings.find(
       (building: DefaultBuilding) => building.X1_Type === result.building_type
     );
-
+  
     if (defaultBuilding) {
       const defaultHeating = defaultBuilding.Y1_Heating || 0;
-
+  
       if (defaultHeating > 0) {
         const improvement = ((defaultHeating - resultHeating) / defaultHeating) * 100;
         return improvement.toFixed(2);
       }
     }
-
+  
     return '0';
   };
 
   const calculateCoolingImprovement = (result: SimulationResult): string => {
-    const resultCooling = result.cooling_demand || 0;
-
+    const resultCooling = Number(result.cooling_demand) || 0; // Ensure resultCooling is a number
+  
     const defaultBuilding = defaultBuildings.find(
       (building: DefaultBuilding) => building.X1_Type === result.building_type
     );
-
+  
     if (defaultBuilding) {
       const defaultCooling = defaultBuilding.Y2_Cooling || 0;
-
+  
       if (defaultCooling > 0) {
         const improvement = ((defaultCooling - resultCooling) / defaultCooling) * 100;
         return improvement.toFixed(2);
       }
     }
-
+  
     return '0';
-  };
+  };  
 
   const labels = simulationData.map((_result, index) => `Attempt ${index + 1}`);
   const heatingValues = simulationData.map((result) => result.heating_demand || 0);
