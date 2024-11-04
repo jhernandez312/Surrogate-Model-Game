@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         } = data;
 
         // Send the form data to the Flask API for prediction
-        const response = await fetch('https://surrogate-model-game-se29.onrender.com', {
+        const response = await fetch('https://surrogate-model-game-pa0i.onrender.com', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -32,7 +32,7 @@ export default function RunButton({ formData }: RunButtonProps) {
   const handleRun = async () => {
     console.log('FormValues:', JSON.stringify(formData)); // Print FormValues to the console
     try {
-      const response = await fetch('https://surrogate-model-game-se29.onrender.com', {
+      const response = await fetch('https://surrogate-model-game-pa0i.onrender.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
