@@ -10,13 +10,12 @@ import { Context } from 'chartjs-plugin-datalabels';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
-
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
 interface SimulationResult {
   building_type: string;
-  heating_demand?: number;
-  cooling_demand?: number;
+  heating_demand?: number | [number, null];
+  cooling_demand?: number | [number, null];
 }
 
 interface DefaultBuilding {
@@ -29,7 +28,6 @@ export default function BarGraph() {
   const [simulationData, setSimulationData] = useState<SimulationResult[]>([]);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
-  // Detect if dark mode is enabled
   useEffect(() => {
     const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
     setIsDarkMode(darkModeQuery.matches);
@@ -40,54 +38,82 @@ export default function BarGraph() {
     return () => darkModeQuery.removeEventListener('change', handleChange);
   }, []);
 
-  // Function to load data from localStorage
   const loadSimulationData = () => {
-    const data = localStorage.getItem('simulationResults') || '[]';
-    setSimulationData(JSON.parse(data));
+    const data = JSON.parse(localStorage.getItem('simulationResults') || '[]');
+    
+    // Ensure that heating_demand and cooling_demand are numeric values, not arrays
+    const cleanedData = data.map((entry: SimulationResult) => ({
+      ...entry,
+      heating_demand: Array.isArray(entry.heating_demand) ? entry.heating_demand[0] : entry.heating_demand,
+      cooling_demand: Array.isArray(entry.cooling_demand) ? entry.cooling_demand[0] : entry.cooling_demand,
+    }));
+
+    setSimulationData(cleanedData);
   };
 
-  // Load data initially on component mount
   useEffect(() => {
     loadSimulationData();
   }, []);
 
-  const calculateTotalEnergyDemand = (result: SimulationResult): number => {
-    const resultHeating = result.heating_demand || 0;
-    const resultCooling = result.cooling_demand || 0;
-    return resultHeating + resultCooling;
-  };
-
-  const calculatePercentImprovement = (result: SimulationResult): string => {
-    const resultTotalDemand = calculateTotalEnergyDemand(result);
-
+  const calculateHeatingImprovement = (result: SimulationResult): string => {
+    const resultHeating = typeof result.heating_demand === 'number' ? result.heating_demand : 0;
+  
     const defaultBuilding = defaultBuildings.find(
       (building: DefaultBuilding) => building.X1_Type === result.building_type
     );
-
+  
     if (defaultBuilding) {
       const defaultHeating = defaultBuilding.Y1_Heating || 0;
-      const defaultCooling = defaultBuilding.Y2_Cooling || 0;
-      const defaultTotalDemand = defaultHeating + defaultCooling;
-
-      if (defaultTotalDemand > 0) {
-        return (((defaultTotalDemand - resultTotalDemand) / defaultTotalDemand) * 100).toFixed(2);
+  
+      if (defaultHeating > 0) {
+        const improvement = ((defaultHeating - resultHeating) / defaultHeating) * 100;
+        return improvement.toFixed(2);
       }
     }
+  
     return '0';
   };
 
+  const calculateCoolingImprovement = (result: SimulationResult): string => {
+    const resultCooling = Number(result.cooling_demand) || 0; // Ensure resultCooling is a number
+  
+    const defaultBuilding = defaultBuildings.find(
+      (building: DefaultBuilding) => building.X1_Type === result.building_type
+    );
+  
+    if (defaultBuilding) {
+      const defaultCooling = defaultBuilding.Y2_Cooling || 0;
+  
+      if (defaultCooling > 0) {
+        const improvement = ((defaultCooling - resultCooling) / defaultCooling) * 100;
+        return improvement.toFixed(2);
+      }
+    }
+  
+    return '0';
+  };  
+
   const labels = simulationData.map((_result, index) => `Attempt ${index + 1}`);
-  const dataValues = simulationData.map((result) => calculateTotalEnergyDemand(result));
-  const improvementValues = simulationData.map((result) => calculatePercentImprovement(result));
+  const heatingValues = simulationData.map((result) => result.heating_demand || 0);
+  const coolingValues = simulationData.map((result) => result.cooling_demand || 0);
+  const heatingImprovementValues = simulationData.map((result) => calculateHeatingImprovement(result));
+  const coolingImprovementValues = simulationData.map((result) => calculateCoolingImprovement(result));
 
   const data = {
     labels,
     datasets: [
       {
-        label: 'Energy Demand (kWh)',
-        data: dataValues,
-        backgroundColor: dataValues.map((value) => (value < 0 ? 'rgba(255, 99, 132, 0.6)' : 'rgba(75, 192, 192, 0.6)')), // Red for negative, green for positive
-        borderColor: dataValues.map((value) => (value < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)')), // Darker border for each color
+        label: 'Heating Demand (kWh)',
+        data: heatingValues,
+        backgroundColor: 'rgba(255, 99, 132, 0.6)', // Red for heating
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Cooling Demand (kWh)',
+        data: coolingValues,
+        backgroundColor: 'rgba(54, 162, 235, 0.6)', // Blue for cooling
+        borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1,
       },
     ],
@@ -106,16 +132,25 @@ export default function BarGraph() {
       },
       title: {
         display: true,
-        text: 'Building Energy Demand in kWh',
+        text: 'Building Heating and Cooling Demand in kWh',
         color: isDarkMode ? '#ededed' : '#171717',
       },
       datalabels: {
         display: true,
         color: (context: Context) => {
-          const improvement = parseFloat(improvementValues[context.dataIndex]);
-          return improvement < 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)'; // Red for negative, green for positive
+          const improvement =
+            context.dataset.label === 'Heating Demand (kWh)'
+              ? parseFloat(heatingImprovementValues[context.dataIndex])
+              : parseFloat(coolingImprovementValues[context.dataIndex]);
+          return improvement > 0 ? 'green' : improvement < 0 ? 'red' : 'black';
         },
-        formatter: (_value: number, context: Context) => `${improvementValues[context.dataIndex]}%`,
+        formatter: (value: number, context: Context) => {
+          const improvement =
+            context.dataset.label === 'Heating Demand (kWh)'
+              ? heatingImprovementValues[context.dataIndex]
+              : coolingImprovementValues[context.dataIndex];
+          return `${improvement}%`;
+        },
         anchor: 'end' as const,
         align: 'end' as const,
         offset: -5,
@@ -134,6 +169,8 @@ export default function BarGraph() {
           text: 'Attempt Number',
           color: isDarkMode ? '#ededed' : '#171717',
         },
+        barPercentage: 0.9, // Controls the width of individual bars
+        categoryPercentage: 0.5, // Controls the space between groups of bars
       },
       y: {
         beginAtZero: true,
