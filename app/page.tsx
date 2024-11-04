@@ -171,7 +171,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.headerTitle}>Your Energy Bill Predictor</h1>
+        <h1 className={styles.headerTitle}>Energy Load Predictor</h1>
       </header>
 
       <div className={styles.content}>

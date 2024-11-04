@@ -59,7 +59,7 @@ export default function RunButton({ formData }: RunButtonProps) {
       existingResults.push(newResult);
       localStorage.setItem('simulationResults', JSON.stringify(existingResults));
 
-      alert(`Predicted Heating Load: ${heatingDemand} | Predicted Cooling Load: ${coolingDemand}`);
+      alert(`Predicted Heating Load: ${heatingDemand.toFixed(2)} kWh | Predicted Cooling Load: ${coolingDemand.toFixed(2)} kWh`);
 
       // Increment the attempt counter and store in localStorage
       const nextAttempt = attemptCount + 1;
