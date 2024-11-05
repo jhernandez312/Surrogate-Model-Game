@@ -1,31 +1,30 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder
-from pickle import load
+from joblib import load  # Use joblib for loading joblib files
 
 app = Flask(__name__)
 CORS(app)
 
-# Load the saved models
-model_heating = load(open('xgbr_best_Y1_1.sav', 'rb'))  # Model for heating load
-model_cooling = load(open('xgbr_best_Y2.sav', 'rb'))    # Model for cooling load
+# Load the saved models using joblib
+model_heating = load('Model_Heating_1104/gbr_best_Y1_compat.joblib')
+model_cooling = load('Model_Cooling_1104/gbr_best_Y2_compat.joblib')
 
-# Load pre-fitted label encoders (these should match the encoders used during training)
-label_encoders = {
-    'X1_Type': LabelEncoder(),
-    'X3_Shape': LabelEncoder(),
-    'X13_EnergyCode': LabelEncoder(),
-    'X14_HVAC': LabelEncoder()
+# Load pre-trained encoders for the heating model
+label_encoders_heating = {
+    'X1_Type': load(open('Model_Heating_1104/X1_Type_encoder.pkl', 'rb')),
+    'X3_Shape': load(open('Model_Heating_1104/X3_Shape_encoder.pkl', 'rb')),
+    'X13_EnergyCode': load(open('Model_Heating_1104/X13_EnergyCode_encoder.pkl', 'rb')),
+    'X14_HVAC': load(open('Model_Heating_1104/X14_HVAC_encoder.pkl', 'rb'))
 }
 
-# Fit encoders with categories as used during training
-label_encoders['X1_Type'].fit(['SmallHotel', 'Retail', 'Office', 'Warehouse', 'StripMall', 'Outpatient',
-                               'FullServiceRestaurant', 'QuickServiceRestaurant', 'LargeHotel', 
-                               'PrimarySchool', 'Hospital', 'SecondarySchool'])
-label_encoders['X3_Shape'].fit(['Wide rectangle', 'L shape', 'T shape'])
-label_encoders['X13_EnergyCode'].fit(['ComStock 90.1-2007', 'ComStock DOE Ref 1980-2004', 'ComStock 90.1-2004', 'ComStock DOE Ref Pre-1980'])
-label_encoders['X14_HVAC'].fit(['Small Packaged Unit', 'Multizone CAV/VAV', 'Zone-by-Zone', 'Residential Style Central Systems'])
+# Load pre-trained encoders for the cooling model
+label_encoders_cooling = {
+    'X1_Type': load(open('Model_Cooling_1104/X1_Type_encoder.pkl', 'rb')),
+    'X3_Shape': load(open('Model_Cooling_1104/X3_Shape_encoder.pkl', 'rb')),
+    'X13_EnergyCode': load(open('Model_Cooling_1104/X13_EnergyCode_encoder.pkl', 'rb')),
+    'X14_HVAC': load(open('Model_Cooling_1104/X14_HVAC_encoder.pkl', 'rb'))
+}
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -45,16 +44,19 @@ def predict():
         'X14_HVAC': [data['hvac_category']],
     })
 
-    # Apply label encoders to categorical columns
-    for col, encoder in label_encoders.items():
-        df[col] = encoder.transform(df[col])
+    # Apply label encoders for heating prediction
+    df_heating = df.copy()
+    for col, encoder in label_encoders_heating.items():
+        df_heating[col] = encoder.transform(df_heating[col])
 
-    # Scale numeric features (if needed, uncomment the scaler code above)
-    scaled_data = df
+    # Apply label encoders for cooling prediction
+    df_cooling = df.copy()
+    for col, encoder in label_encoders_cooling.items():
+        df_cooling[col] = encoder.transform(df_cooling[col])
 
     # Make predictions
-    heating_load_prediction = model_heating.predict(scaled_data) / (data['Roof_Area'] * data['Building_Stories'])
-    cooling_load_prediction = model_cooling.predict(scaled_data) / (data['Roof_Area'] * data['Building_Stories'])
+    heating_load_prediction = model_heating.predict(df_heating) / (data['Roof_Area'] * data['Building_Stories'])
+    cooling_load_prediction = model_cooling.predict(df_cooling) / (data['Roof_Area'] * data['Building_Stories'])
 
     # Return both predictions as JSON
     return jsonify({
