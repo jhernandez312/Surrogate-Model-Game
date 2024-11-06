@@ -32,7 +32,7 @@ export default function RunButton({ formData }: RunButtonProps) {
   const handleRun = async () => {
     console.log('FormValues:', JSON.stringify(formData)); // Print FormValues to the console
     try {
-      const response = await fetch('https://surrogate-model-game-se29.onrender.com/predict', {
+      const response = await fetch('https://surrogate-model-game-pa0i.onrender.com/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,7 +59,11 @@ export default function RunButton({ formData }: RunButtonProps) {
       existingResults.push(newResult);
       localStorage.setItem('simulationResults', JSON.stringify(existingResults));
 
-      alert(`Predicted Heating Load: ${heatingDemand} | Predicted Cooling Load: ${coolingDemand}`);
+      // Format heating and cooling demand with two decimal places using Math.round
+      const heatingDemandFormatted = Math.round(Number(heatingDemand) * 100) / 100;
+      const coolingDemandFormatted = Math.round(Number(coolingDemand) * 100) / 100;
+
+      alert(`Predicted Heating Load: ${heatingDemandFormatted} kWh | Predicted Cooling Load: ${coolingDemandFormatted} kWh`);
 
       // Increment the attempt counter and store in localStorage
       const nextAttempt = attemptCount + 1;
