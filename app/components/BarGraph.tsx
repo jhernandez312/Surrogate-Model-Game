@@ -66,8 +66,8 @@ export default function BarGraph() {
       const defaultHeating = defaultBuilding.Y1_Heating || 0;
   
       if (defaultHeating > 0) {
-        const improvement = ((defaultHeating - resultHeating) / defaultHeating) * 100;
-        return improvement.toFixed(2);
+        const improvement = -((defaultHeating - resultHeating) / defaultHeating) * 100;
+        return Math.round(improvement).toString();
       }
     }
   
@@ -85,8 +85,8 @@ export default function BarGraph() {
       const defaultCooling = defaultBuilding.Y2_Cooling || 0;
   
       if (defaultCooling > 0) {
-        const improvement = ((defaultCooling - resultCooling) / defaultCooling) * 100;
-        return improvement.toFixed(2);
+        const improvement = -((defaultCooling - resultCooling) / defaultCooling) * 100;
+        return Math.round(improvement).toString();
       }
     }
   
