@@ -104,11 +104,6 @@
   background-color: #555;
 }
 
-.refreshButton {
-  margin-bottom: 20px;
-  background-color: var(--background);
-}
-
 /* New styles for BarGraph component */
 .barGraphContainer {
   width: 100%;
@@ -169,6 +164,11 @@
   font-weight: bold;
   border-radius: 0.5rem;
   transition: background-color 0.2s ease-in-out;
+}
+
+.refreshButton {
+  margin-bottom: 20px;
+  background-color: var(--background);
 }
 
 .refreshButton {
