@@ -132,7 +132,7 @@ export default function BarGraph() {
       },
       title: {
         display: true,
-        text: 'Building Heating and Cooling Demand in kWh',
+        text: 'Building Heating and Cooling Demand in kWh / m²',
         color: isDarkMode ? '#ededed' : '#171717',
       },
       datalabels: {
