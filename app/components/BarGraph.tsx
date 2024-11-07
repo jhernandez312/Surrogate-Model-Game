@@ -176,7 +176,7 @@ export default function BarGraph() {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Energy Demand (kWh)',
+          text: 'Energy Demand (kWh) / m²',
           color: isDarkMode ? '#ededed' : '#171717',
         },
         ticks: {
