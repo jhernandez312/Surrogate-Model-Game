@@ -196,7 +196,7 @@ export default function BarGraph() {
       <Bar data={data} options={options} />
       <button onClick={loadSimulationData} className={styles.refreshButton}>
         <FontAwesomeIcon icon={faSyncAlt} style={{ marginRight: '8px' }} />
-        Refresh Data
+        Visualization
       </button>
 
       <button onClick={clearResults} className={styles.clearButton}>Clear Results</button>
