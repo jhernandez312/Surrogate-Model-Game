@@ -142,7 +142,7 @@ export default function BarGraph() {
             context.dataset.label === 'Heating Demand (kWh)'
               ? parseFloat(heatingImprovementValues[context.dataIndex])
               : parseFloat(coolingImprovementValues[context.dataIndex]);
-          return improvement > 0 ? 'green' : improvement < 0 ? 'red' : 'black';
+          return improvement < 0 ? 'green' : improvement > 0 ? 'red' : 'black';
         },
         formatter: (value: number, context: Context) => {
           const improvement =
