@@ -312,7 +312,7 @@ export default function Home() {
         </form>
 
         <div className={styles.previewSection}>
-          <Canvas style={{ height: 400, width: '100%' }}>
+          <Canvas style={{ height: '50vw', width: '100%', maxHeight: '400px', }}>
             <ambientLight />
             <Previewer
               width={formData.Length / 10 || 1}

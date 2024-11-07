@@ -40,7 +40,7 @@ export default function BarGraph() {
 
   const loadSimulationData = () => {
     const data = JSON.parse(localStorage.getItem('simulationResults') || '[]');
-    
+
     // Ensure that heating_demand and cooling_demand are numeric values, not arrays
     const cleanedData = data.map((entry: SimulationResult) => ({
       ...entry,
@@ -57,41 +57,41 @@ export default function BarGraph() {
 
   const calculateHeatingImprovement = (result: SimulationResult): string => {
     const resultHeating = typeof result.heating_demand === 'number' ? result.heating_demand : 0;
-  
+
     const defaultBuilding = defaultBuildings.find(
       (building: DefaultBuilding) => building.X1_Type === result.building_type
     );
-  
+
     if (defaultBuilding) {
       const defaultHeating = defaultBuilding.Y1_Heating || 0;
-  
+
       if (defaultHeating > 0) {
         const improvement = -((defaultHeating - resultHeating) / defaultHeating) * 100;
         return Math.round(improvement).toString();
       }
     }
-  
+
     return '0';
   };
 
   const calculateCoolingImprovement = (result: SimulationResult): string => {
     const resultCooling = Number(result.cooling_demand) || 0; // Ensure resultCooling is a number
-  
+
     const defaultBuilding = defaultBuildings.find(
       (building: DefaultBuilding) => building.X1_Type === result.building_type
     );
-  
+
     if (defaultBuilding) {
       const defaultCooling = defaultBuilding.Y2_Cooling || 0;
-  
+
       if (defaultCooling > 0) {
         const improvement = -((defaultCooling - resultCooling) / defaultCooling) * 100;
         return Math.round(improvement).toString();
       }
     }
-  
+
     return '0';
-  };  
+  };
 
   const labels = simulationData.map((_result, index) => `Attempt ${index + 1}`);
   const heatingValues = simulationData.map((result) => result.heating_demand || 0);
@@ -192,14 +192,21 @@ export default function BarGraph() {
   };
 
   return (
-    <div className={styles.barGraphContainer}>
-      <Bar data={data} options={options} />
+    <div
+      style={{
+        width: '100%',
+        height: '500vw', // Makes the container height responsive to viewport width
+        maxHeight: '300px', // Limits the max height on larger screens
+      }}
+      className={styles.barGraphContainer}
+    >
+      <Bar data={data} options={{ ...options, responsive: true, maintainAspectRatio: false }} />
       <button onClick={loadSimulationData} className={styles.refreshButton}>
         <FontAwesomeIcon icon={faSyncAlt} style={{ marginRight: '8px' }} />
         Visualization
       </button>
-
       <button onClick={clearResults} className={styles.clearButton}>Clear Results</button>
     </div>
   );
+
 }
